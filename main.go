@@ -9,6 +9,7 @@ import (
 	"math/big"
 	"net"
 	"net/http"
+	"os"
 	"strings"
 
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
@@ -16,6 +17,7 @@ import (
 	"github.com/ethereum/go-ethereum/common/hexutil"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
+	"github.com/joho/godotenv"
 
 	clearnetregistry "depin-proxy/contracts"
 )
@@ -30,7 +32,7 @@ var ivs []string
 var connections []Connection
 
 func getNodeWallet() (*ecdsa.PrivateKey, common.Address) {
-	walletPrivateKey, err := crypto.HexToECDSA("fad9c8855b740a0b7ed4c221dbad0f33a83a49cad6b3fe8d5817ac83d38b6a19")
+	walletPrivateKey, err := crypto.HexToECDSA(os.Getenv("WALLET_PRIVATE_KEY"))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -47,7 +49,7 @@ func getNodeWallet() (*ecdsa.PrivateKey, common.Address) {
 }
 
 func initContract() (*clearnetregistry.Clearnetregistry, *ethclient.Client, error) {
-	endpoint := "https://sepolia.infura.io/v3/8c1eb7cd8a5a43c9bc5c3d69db182b83"
+	endpoint := os.Getenv("INFURA_ENDPOINT")
 	client, err := ethclient.Dial(endpoint)
 	if err != nil {
 		return nil, nil, err
@@ -58,7 +60,7 @@ func initContract() (*clearnetregistry.Clearnetregistry, *ethclient.Client, erro
 		return nil, nil, err
 	}
 
-	address := common.HexToAddress("0xf844a182909553426892d4612f04d9de0295AC42")
+	address := common.HexToAddress(os.Getenv("CONTRACT_ADDRESS"))
 	instance, err := clearnetregistry.NewClearnetregistry(address, client)
 	if err != nil {
 		return nil, nil, err
@@ -93,6 +95,11 @@ func getAuth(client *ethclient.Client, walletPrivateKey *ecdsa.PrivateKey, walle
 }
 
 func main() {
+	err := godotenv.Load()
+	if err != nil {
+		log.Println("No .env file found")
+	}
+
 	instance, client, err := initContract()
 	if err != nil {
 		log.Fatal(err)
@@ -101,18 +108,18 @@ func main() {
 	auth := getAuth(client, walletPrivateKey, walletAddress)
 
 	_, _ = instance, auth
-	// tx, err := instance.RegisterNode(auth, key, value)
+	// tx, err := instance.RegisterNode(auth, walletAddress.Hex(), [32]byte(crypto.HashData(crypto.NewKeccakState(), walletAddress.Bytes())), big.NewInt(1000000000000000000))
 	// if err != nil {
 	// 	log.Fatal(err)
 	// }
 
-	// fmt.Printf("tx sent: %s", tx.Hash().Hex())
+	// fmt.Printf("tx sent: %s\n", tx.Hash().Hex())
 
 	http.HandleFunc("/connect", connectionHandler)
 	http.HandleFunc("/disconnect", disconectHandler)
 
 	fmt.Println("LocalIP:", GetLocalIP())
-	http.ListenAndServe(":8080", nil)
+	http.ListenAndServe(":"+os.Getenv("PORT"), nil)
 }
 
 func generateIV() string {
@@ -138,7 +145,6 @@ func isValidIV(iv string) bool {
 }
 
 func disconectHandler(w http.ResponseWriter, r *http.Request) {
-	// TODO: if have time, add server side nonce challenge to prevent replay attacks
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	if r.Method == http.MethodGet {
 		iv := generateIV()
@@ -182,7 +188,6 @@ func disconectHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func connectionHandler(w http.ResponseWriter, r *http.Request) {
-	// TODO: if have time, add server side nonce challenge to prevent replay attacks
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	if r.Method == http.MethodGet {
 		iv := generateIV()

@@ -10,6 +10,7 @@ import (
 	"net"
 	"net/http"
 	"os"
+	"strconv"
 	"strings"
 
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
@@ -19,13 +20,17 @@ import (
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/joho/godotenv"
 
-	clearnetregistry "depin-proxy/contracts"
+	clearnet "depin-proxy/contracts"
 )
 
 type Connection struct {
 	walletAddress      string
 	vpnClientPublicKey string
 }
+
+var ip net.IP
+
+var port int
 
 var ivs []string
 
@@ -48,7 +53,7 @@ func getNodeWallet() (*ecdsa.PrivateKey, common.Address) {
 	return walletPrivateKey, walletAdress
 }
 
-func initContract() (*clearnetregistry.Clearnetregistry, *ethclient.Client, error) {
+func initContract() (*clearnet.Clearnet, *ethclient.Client, error) {
 	endpoint := os.Getenv("INFURA_ENDPOINT")
 	client, err := ethclient.Dial(endpoint)
 	if err != nil {
@@ -61,7 +66,7 @@ func initContract() (*clearnetregistry.Clearnetregistry, *ethclient.Client, erro
 	}
 
 	address := common.HexToAddress(os.Getenv("CONTRACT_ADDRESS"))
-	instance, err := clearnetregistry.NewClearnetregistry(address, client)
+	instance, err := clearnet.NewClearnet(address, client)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -99,6 +104,11 @@ func main() {
 	if err != nil {
 		log.Println("No .env file found")
 	}
+	ip = GetLocalIP()
+	port, err := strconv.Atoi(os.Getenv("PORT"))
+	if err != nil {
+		log.Fatal("Invalid PORT value:" + err.Error())
+	}
 
 	instance, client, err := initContract()
 	if err != nil {
@@ -107,19 +117,26 @@ func main() {
 	walletPrivateKey, walletAddress := getNodeWallet()
 	auth := getAuth(client, walletPrivateKey, walletAddress)
 
-	_, _ = instance, auth
-	// tx, err := instance.RegisterNode(auth, walletAddress.Hex(), [32]byte(crypto.HashData(crypto.NewKeccakState(), walletAddress.Bytes())), big.NewInt(1000000000000000000))
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
+	// _, _ = instance, auth
+	tx, err := instance.RegisterNode(auth, ip.String(), uint16(port), big.NewInt(1000000000000000000))
+	if err != nil {
+		log.Fatal(err)
+	}
 
-	// fmt.Printf("tx sent: %s\n", tx.Hash().Hex())
+	fmt.Printf("tx sent: %s\n", tx.Hash().Hex())
+
+	registedNodes, err := instance.GetActiveNodes(nil)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println("Registered Nodes:", registedNodes)
 
 	http.HandleFunc("/connect", connectionHandler)
 	http.HandleFunc("/disconnect", disconectHandler)
 
-	fmt.Println("LocalIP:", GetLocalIP())
-	http.ListenAndServe(":"+os.Getenv("PORT"), nil)
+	fmt.Println("LocalIP:", ip.String())
+	http.ListenAndServe(":"+strconv.Itoa(port), nil)
 }
 
 func generateIV() string {

@@ -145,3 +145,68 @@ func deRegisterNode(clearnet_instance *clearnet.Clearnet, client *ethclient.Clie
 	fmt.Println("✅ Node deregistered")
 	return deRegisterTx, nil
 }
+
+func updateNodePrice(clearnet_instance *clearnet.Clearnet, client *ethclient.Client, auth *bind.TransactOpts, newPricePerMinute *big.Int) (*types.Transaction, error) {
+	updateTx, err := clearnet_instance.UpdatePrice(auth, newPricePerMinute)
+	if err != nil {
+		return nil, fmt.Errorf("UpdateNode tx error: %w", err)
+	}
+
+	fmt.Printf("UpdateTx sent: %s\n", updateTx.Hash().Hex())
+	updateReceipt, err := bind.WaitMined(context.Background(), client, updateTx)
+	if err != nil {
+		return nil, fmt.Errorf("waiting update mined: %w", err)
+	}
+	if updateReceipt.Status != types.ReceiptStatusSuccessful {
+		return nil, fmt.Errorf("update tx failed, status=%v", updateReceipt.Status)
+	}
+	fmt.Println("✅ Node price updated")
+	fmt.Println("New Price per Minute (in CLRToken): " + (new(big.Float).Quo(new(big.Float).SetInt(newPricePerMinute), new(big.Float).SetInt(big.NewInt(int64(1e18))))).String())
+	return updateTx, nil
+}
+
+func updateNodeInfo(clearnet_instance *clearnet.Clearnet, client *ethclient.Client, auth *bind.TransactOpts, newIP string, newVPNPort uint16) (*types.Transaction, error) {
+	updateTx, err := clearnet_instance.UpdateNodeInfo(auth, newIP, newVPNPort)
+	if err != nil {
+		return nil, fmt.Errorf("UpdateNodeInfo tx error: %w", err)
+	}
+
+	fmt.Printf("UpdateNodeInfo Tx sent: %s\n", updateTx.Hash().Hex())
+	updateReceipt, err := bind.WaitMined(context.Background(), client, updateTx)
+	if err != nil {
+		return nil, fmt.Errorf("waiting updateNodeInfo mined: %w", err)
+	}
+	if updateReceipt.Status != types.ReceiptStatusSuccessful {
+		return nil, fmt.Errorf("updateNodeInfo tx failed, status=%v", updateReceipt.Status)
+	}
+	fmt.Println("✅ Node info updated")
+	fmt.Println("Ip: " + ip.String())
+	fmt.Println("VPN Port: " + fmt.Sprintf("%d", vpnPort))
+	return updateTx, nil
+}
+
+func getNodeStatus(clearnet_instance *clearnet.Clearnet, walletAddress common.Address) (NodeInfo, error) {
+	nodeInfo, err := clearnet_instance.GetNodeInfo(&bind.CallOpts{}, walletAddress)
+	if err != nil {
+		return NodeInfo{}, fmt.Errorf("GetNodeInfo call error: %w", err)
+	}
+
+	return NodeInfo{
+		ip:                 nodeInfo.IpAddress,
+		vpnPort:            nodeInfo.Port,
+		pricePerMinute:     nodeInfo.PricePerMinute,
+		reputationScore:    nodeInfo.ReputationScore,
+		totalMinutesServed: nodeInfo.TotalMinutesServed,
+		totalEarnings:      nodeInfo.TotalEarnings,
+	}, nil
+}
+
+func printNodeStatus(nodeInfo NodeInfo) {
+	fmt.Println("Node Status:")
+	fmt.Println("IP Address: ", nodeInfo.ip)
+	fmt.Println("VPN Port: ", nodeInfo.vpnPort)
+	fmt.Println("Price Per Minute (in CLRToken): ", new(big.Float).Quo(new(big.Float).SetInt(nodeInfo.pricePerMinute), new(big.Float).SetInt(big.NewInt(int64(1e18)))).String())
+	fmt.Println("Reputation Score: ", nodeInfo.reputationScore.String())
+	fmt.Println("Total Minutes Served: ", nodeInfo.totalMinutesServed.String())
+	fmt.Println("Total Earnings (in CLRToken): ", new(big.Float).Quo(new(big.Float).SetInt(nodeInfo.totalEarnings), new(big.Float).SetInt(big.NewInt(int64(1e18)))).String())
+}

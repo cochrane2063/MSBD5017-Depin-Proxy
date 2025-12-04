@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"math/big"
 	"net"
 	"net/http"
 	"os"
@@ -27,6 +28,15 @@ type Connection struct {
 	vpnClientPublicKey string
 }
 
+type NodeInfo struct {
+	ip                 string
+	vpnPort            uint16
+	pricePerMinute     *big.Int
+	reputationScore    *big.Int
+	totalMinutesServed *big.Int
+	totalEarnings      *big.Int
+}
+
 var ip net.IP
 var port int
 var vpnPort int
@@ -40,6 +50,8 @@ func dialogue(clrtoken_instance *clrtoken.Clrtoken, clearnet_instance *clearnet.
 	fmt.Println("Available commands:")
 	fmt.Println("  register    - Register this node on ClearNet")
 	fmt.Println("  deregister  - Deregister this node from ClearNet")
+	fmt.Println("  update node - Update this node's information")
+	fmt.Println("  update price - Update this node's price per minute")
 	fmt.Println("  status      - Show current status")
 	fmt.Println("  help        - Show available commands")
 	for {
@@ -55,6 +67,8 @@ func dialogue(clrtoken_instance *clrtoken.Clrtoken, clearnet_instance *clearnet.
 			fmt.Println("Available commands:")
 			fmt.Println("  register    - Register this node on ClearNet")
 			fmt.Println("  deregister  - Deregister this node from ClearNet")
+			fmt.Println("  update node - Update this node's information")
+			fmt.Println("  update price - Update this node's price per minute")
 			fmt.Println("  status      - Show current status")
 			fmt.Println("  help        - Show available commands")
 		case "register":
@@ -64,8 +78,42 @@ func dialogue(clrtoken_instance *clrtoken.Clrtoken, clearnet_instance *clearnet.
 		case "deregister":
 			fmt.Println("Deregistering")
 			deRegisterNode(clearnet_instance, client, getAuth(client, walletPrivateKey, walletAddress))
+		case "update node":
+			fmt.Print("Please enter the new vpn port number: ")
+			line, err := reader.ReadString('\n')
+			if err != nil {
+				log.Println("stdin read error:", err)
+				return
+			}
+			vpnPort, err = strconv.Atoi(strings.TrimSpace(line))
+			if err != nil {
+				fmt.Println("Invalid VPN_PORT value:" + err.Error())
+				continue
+			}
+			updateNodeInfo(clearnet_instance, client, getAuth(client, walletPrivateKey, walletAddress), ip.String(), uint16(vpnPort))
+		case "update price":
+			fmt.Println("Please enter the new price per minute in CLRToken (e.g., 0.01): ")
+			line, err := reader.ReadString('\n')
+			if err != nil {
+				log.Println("stdin read error:", err)
+				return
+			}
+			priceFloat, err := strconv.ParseFloat(strings.TrimSpace(line), 64)
+			if err != nil {
+				fmt.Println("Invalid price value:" + err.Error())
+				continue
+			}
+			newPrice := new(big.Int).Mul(big.NewInt(int64(priceFloat*1e18)), big.NewInt(1))
+			updateNodePrice(clearnet_instance, client, getAuth(client, walletPrivateKey, walletAddress), newPrice)
 		case "status":
+			fmt.Println("Connection Status:")
 			fmt.Println("Current Connections:", len(connections))
+			nodeInfo, err := getNodeStatus(clearnet_instance, walletAddress)
+			if err != nil {
+				fmt.Println("Error getting node status:", err)
+				continue
+			}
+			printNodeStatus(nodeInfo)
 		default:
 			fmt.Println("unknown command:", cmd)
 		}
@@ -194,7 +242,6 @@ func connectionHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("VPN Client Public Key:", vpnClientPublicKey)
 	fmt.Println("Signature:", signature)
 
-	// Verify signature
 	if !isValidIV(iv) {
 		http.Error(w, "Invalid or reused IV", http.StatusBadRequest)
 		return
@@ -216,7 +263,6 @@ func connectionHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func verifySignature(message, sigHex string) (string, error) {
-	// decode signature
 	sig, err := hexutil.Decode(sigHex)
 	if err != nil {
 		return "", err
@@ -225,22 +271,18 @@ func verifySignature(message, sigHex string) (string, error) {
 		return "", fmt.Errorf("invalid signature length: %d", len(sig))
 	}
 
-	// adjust V if needed (MetaMask returns 27/28)
 	if sig[64] >= 27 {
 		sig[64] -= 27
 	}
 
-	// recreate prefixed message
 	prefixed := fmt.Sprintf("\x19Ethereum Signed Message:\n%d%s", len(message), message)
 	hash := crypto.Keccak256Hash([]byte(prefixed))
 
-	// recover public key
 	pubKey, err := crypto.SigToPub(hash.Bytes(), sig)
 	if err != nil {
 		return "", err
 	}
 
-	// derive address and compare (case-insensitive)
 	recoveredAddr := crypto.PubkeyToAddress(*pubKey).Hex()
 	return recoveredAddr, nil
 }

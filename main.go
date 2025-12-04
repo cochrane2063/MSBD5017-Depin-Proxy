@@ -1,26 +1,25 @@
 package main
 
 import (
-	"context"
+	"bufio"
 	"crypto/ecdsa"
 	"fmt"
 	"io"
 	"log"
-	"math/big"
 	"net"
 	"net/http"
 	"os"
 	"strconv"
 	"strings"
 
-	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/common/hexutil"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/joho/godotenv"
 
-	clearnet "depin-proxy/contracts"
+	clrtoken "depin-proxy/contracts/CLRToken"
+	clearnet "depin-proxy/contracts/ClearNet"
 )
 
 type Connection struct {
@@ -29,74 +28,48 @@ type Connection struct {
 }
 
 var ip net.IP
-
 var port int
+var vpnPort int
 
 var ivs []string
-
 var connections []Connection
 
-func getNodeWallet() (*ecdsa.PrivateKey, common.Address) {
-	walletPrivateKey, err := crypto.HexToECDSA(os.Getenv("WALLET_PRIVATE_KEY"))
-	if err != nil {
-		log.Fatal(err)
+func dialogue(clrtoken_instance *clrtoken.Clrtoken, clearnet_instance *clearnet.Clearnet, client *ethclient.Client, walletPrivateKey *ecdsa.PrivateKey, walletAddress common.Address) {
+	reader := bufio.NewReader(os.Stdin)
+	fmt.Println("Welcome to the CLEARNET VPN Node!")
+	fmt.Println("Available commands:")
+	fmt.Println("  register    - Register this node on ClearNet")
+	fmt.Println("  deregister  - Deregister this node from ClearNet")
+	fmt.Println("  status      - Show current status")
+	fmt.Println("  help        - Show available commands")
+	for {
+		fmt.Print("> ")
+		line, err := reader.ReadString('\n')
+		if err != nil {
+			log.Println("stdin read error:", err)
+			return
+		}
+		cmd := strings.TrimSpace(line)
+		switch cmd {
+		case "help":
+			fmt.Println("Available commands:")
+			fmt.Println("  register    - Register this node on ClearNet")
+			fmt.Println("  deregister  - Deregister this node from ClearNet")
+			fmt.Println("  status      - Show current status")
+			fmt.Println("  help        - Show available commands")
+		case "register":
+			fmt.Println("Registering")
+			approveCLRTokenSpending(clrtoken_instance, client, getAuth(client, walletPrivateKey, walletAddress))
+			registerNode(clearnet_instance, client, getAuth(client, walletPrivateKey, walletAddress))
+		case "deregister":
+			fmt.Println("Deregistering")
+			deRegisterNode(clearnet_instance, client, getAuth(client, walletPrivateKey, walletAddress))
+		case "status":
+			fmt.Println("Current Connections:", len(connections))
+		default:
+			fmt.Println("unknown command:", cmd)
+		}
 	}
-
-	walletPublicKey := walletPrivateKey.Public()
-	publicKeyECDSA, ok := walletPublicKey.(*ecdsa.PublicKey)
-	if !ok {
-		log.Fatal("error casting public key to ECDSA")
-	}
-
-	walletAdress := crypto.PubkeyToAddress(*publicKeyECDSA)
-
-	return walletPrivateKey, walletAdress
-}
-
-func initContract() (*clearnet.Clearnet, *ethclient.Client, error) {
-	endpoint := os.Getenv("INFURA_ENDPOINT")
-	client, err := ethclient.Dial(endpoint)
-	if err != nil {
-		return nil, nil, err
-	}
-
-	blockNumber, err := client.BlockNumber(context.Background())
-	if err != nil {
-		return nil, nil, err
-	}
-
-	address := common.HexToAddress(os.Getenv("CONTRACT_ADDRESS"))
-	instance, err := clearnet.NewClearnet(address, client)
-	if err != nil {
-		return nil, nil, err
-	}
-
-	fmt.Println("Latest Block Number:", blockNumber)
-	return instance, client, nil
-}
-
-func getAuth(client *ethclient.Client, walletPrivateKey *ecdsa.PrivateKey, walletAddress common.Address) *bind.TransactOpts {
-	nonce, err := client.PendingNonceAt(context.Background(), walletAddress)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	gasPrice, err := client.SuggestGasPrice(context.Background())
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	chainID := big.NewInt(11155111)
-	auth, err := bind.NewKeyedTransactorWithChainID(walletPrivateKey, chainID)
-	if err != nil {
-		log.Fatal(err)
-	}
-	auth.Nonce = big.NewInt(int64(nonce))
-	auth.Value = big.NewInt(0)
-	auth.GasLimit = uint64(300000)
-	auth.GasPrice = gasPrice
-
-	return auth
 }
 
 func main() {
@@ -105,32 +78,22 @@ func main() {
 		log.Println("No .env file found")
 	}
 	ip = GetLocalIP()
-	port, err := strconv.Atoi(os.Getenv("PORT"))
+	port, err = strconv.Atoi(os.Getenv("PORT"))
 	if err != nil {
 		log.Fatal("Invalid PORT value:" + err.Error())
 	}
+	vpnPort, err = strconv.Atoi(os.Getenv("VPN_PORT"))
+	if err != nil {
+		log.Fatal("Invalid VPN_PORT value:" + err.Error())
+	}
 
-	instance, client, err := initContract()
+	clrtoken_instance, clearnet_instance, client, err := initContract()
 	if err != nil {
 		log.Fatal(err)
 	}
 	walletPrivateKey, walletAddress := getNodeWallet()
-	auth := getAuth(client, walletPrivateKey, walletAddress)
 
-	// _, _ = instance, auth
-	tx, err := instance.RegisterNode(auth, ip.String(), uint16(port), big.NewInt(1000000000000000000))
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	fmt.Printf("tx sent: %s\n", tx.Hash().Hex())
-
-	registedNodes, err := instance.GetActiveNodes(nil)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	fmt.Println("Registered Nodes:", registedNodes)
+	go dialogue(clrtoken_instance, clearnet_instance, client, walletPrivateKey, walletAddress)
 
 	http.HandleFunc("/connect", connectionHandler)
 	http.HandleFunc("/disconnect", disconectHandler)

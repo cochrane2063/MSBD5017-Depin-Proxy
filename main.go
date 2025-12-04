@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"crypto/ecdsa"
+	"encoding/json"
 	"fmt"
 	"io"
 	"log"
@@ -26,34 +27,45 @@ import (
 type Connection struct {
 	walletAddress      string
 	vpnClientPublicKey string
+	ip                 net.IP
 }
 
 type NodeInfo struct {
-	ip                 string
-	vpnPort            uint16
+	ip                 net.IP
+	port               uint16
 	pricePerMinute     *big.Int
 	reputationScore    *big.Int
 	totalMinutesServed *big.Int
 	totalEarnings      *big.Int
 }
 
+type PaymentChannel struct {
+	balance  *big.Int
+	nonce    *big.Int
+	isActive bool
+}
+
 var ip net.IP
 var port int
-var vpnPort int
+
+var clrtoken_instance *clrtoken.Clrtoken
+var clearnet_instance *clearnet.Clearnet
+var client *ethclient.Client
+var walletPrivateKey *ecdsa.PrivateKey
+var walletAddress common.Address
 
 var ivs []string
 var connections []Connection
 
-func dialogue(clrtoken_instance *clrtoken.Clrtoken, clearnet_instance *clearnet.Clearnet, client *ethclient.Client, walletPrivateKey *ecdsa.PrivateKey, walletAddress common.Address) {
+func dialogue() {
 	reader := bufio.NewReader(os.Stdin)
 	fmt.Println("Welcome to the CLEARNET VPN Node!")
 	fmt.Println("Available commands:")
-	fmt.Println("  register    - Register this node on ClearNet")
-	fmt.Println("  deregister  - Deregister this node from ClearNet")
-	fmt.Println("  update node - Update this node's information")
+	fmt.Println("  register     - Register this node on ClearNet")
+	fmt.Println("  deregister   - Deregister this node from ClearNet")
 	fmt.Println("  update price - Update this node's price per minute")
-	fmt.Println("  status      - Show current status")
-	fmt.Println("  help        - Show available commands")
+	fmt.Println("  status       - Show current status")
+	fmt.Println("  help         - Show available commands")
 	for {
 		fmt.Print("> ")
 		line, err := reader.ReadString('\n')
@@ -65,12 +77,11 @@ func dialogue(clrtoken_instance *clrtoken.Clrtoken, clearnet_instance *clearnet.
 		switch cmd {
 		case "help":
 			fmt.Println("Available commands:")
-			fmt.Println("  register    - Register this node on ClearNet")
-			fmt.Println("  deregister  - Deregister this node from ClearNet")
-			fmt.Println("  update node - Update this node's information")
+			fmt.Println("  register     - Register this node on ClearNet")
+			fmt.Println("  deregister   - Deregister this node from ClearNet")
 			fmt.Println("  update price - Update this node's price per minute")
-			fmt.Println("  status      - Show current status")
-			fmt.Println("  help        - Show available commands")
+			fmt.Println("  status       - Show current status")
+			fmt.Println("  help         - Show available commands")
 		case "register":
 			fmt.Println("Registering")
 			approveCLRTokenSpending(clrtoken_instance, client, getAuth(client, walletPrivateKey, walletAddress))
@@ -78,19 +89,6 @@ func dialogue(clrtoken_instance *clrtoken.Clrtoken, clearnet_instance *clearnet.
 		case "deregister":
 			fmt.Println("Deregistering")
 			deRegisterNode(clearnet_instance, client, getAuth(client, walletPrivateKey, walletAddress))
-		case "update node":
-			fmt.Print("Please enter the new vpn port number: ")
-			line, err := reader.ReadString('\n')
-			if err != nil {
-				log.Println("stdin read error:", err)
-				return
-			}
-			vpnPort, err = strconv.Atoi(strings.TrimSpace(line))
-			if err != nil {
-				fmt.Println("Invalid VPN_PORT value:" + err.Error())
-				continue
-			}
-			updateNodeInfo(clearnet_instance, client, getAuth(client, walletPrivateKey, walletAddress), ip.String(), uint16(vpnPort))
 		case "update price":
 			fmt.Println("Please enter the new price per minute in CLRToken (e.g., 0.01): ")
 			line, err := reader.ReadString('\n')
@@ -120,7 +118,18 @@ func dialogue(clrtoken_instance *clrtoken.Clrtoken, clearnet_instance *clearnet.
 	}
 }
 
-func main() {
+func updateChanges() {
+	nodeInfo, err := getNodeStatus(clearnet_instance, walletAddress)
+	if err != nil {
+		fmt.Println("Node not registered")
+		return
+	}
+	if !nodeInfo.ip.Equal(ip) || nodeInfo.port != uint16(port) {
+		updateNodeInfo(clearnet_instance, client, getAuth(client, walletPrivateKey, walletAddress), ip.String(), uint16(port))
+	}
+}
+
+func initialize() {
 	err := godotenv.Load()
 	if err != nil {
 		log.Println("No .env file found")
@@ -130,18 +139,24 @@ func main() {
 	if err != nil {
 		log.Fatal("Invalid PORT value:" + err.Error())
 	}
-	vpnPort, err = strconv.Atoi(os.Getenv("VPN_PORT"))
+	initializeIPPool()
+	err = clearWireguardPeers()
 	if err != nil {
-		log.Fatal("Invalid VPN_PORT value:" + err.Error())
+		log.Fatal("Failed to clear Wireguard peers: " + err.Error())
 	}
 
-	clrtoken_instance, clearnet_instance, client, err := initContract()
+	clrtoken_instance, clearnet_instance, client, err = initContract()
 	if err != nil {
 		log.Fatal(err)
 	}
-	walletPrivateKey, walletAddress := getNodeWallet()
+	walletPrivateKey, walletAddress = getNodeWallet()
+}
 
-	go dialogue(clrtoken_instance, clearnet_instance, client, walletPrivateKey, walletAddress)
+func main() {
+	initialize()
+	updateChanges()
+
+	go dialogue()
 
 	http.HandleFunc("/connect", connectionHandler)
 	http.HandleFunc("/disconnect", disconectHandler)
@@ -207,6 +222,18 @@ func disconectHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	fmt.Println("Disconnecting Wallet Address: ", recoveredAddr)
 
+	connection := getConnectionByWalletAddress(recoveredAddr)
+	if connection == nil {
+		http.Error(w, "No active connection found for this wallet address", http.StatusBadRequest)
+		return
+	}
+
+	err = removeWireguardPeer(connection.vpnClientPublicKey)
+	if err != nil {
+		http.Error(w, "Error removing Wireguard peer: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+
 	removeConnection(recoveredAddr)
 
 	fmt.Println("Connection count:", len(connections))
@@ -253,13 +280,57 @@ func connectionHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	fmt.Println("Wallet Address:", recoveredAddr)
 
-	addConnection(Connection{
-		walletAddress:      recoveredAddr,
-		vpnClientPublicKey: vpnClientPublicKey,
-	})
-	w.WriteHeader(http.StatusOK)
-	w.Write([]byte("Connection accepted"))
+	if connectionExists(recoveredAddr) {
+		http.Error(w, "Connection already exists", http.StatusBadRequest)
+		return
+	}
 
+	paymentChannel, err := getPaymentChannelInfo(clearnet_instance, common.HexToAddress(recoveredAddr))
+	if err != nil {
+		http.Error(w, "Error getting payment channel info: "+err.Error(), http.StatusBadRequest)
+		return
+	}
+	if !paymentChannel.isActive {
+		http.Error(w, "Client not registered", http.StatusBadRequest)
+		return
+	}
+	wireguardClientIP := addConnection(recoveredAddr, vpnClientPublicKey)
+
+	wireguardPublicKey, err := getWireguardPublicKey()
+	if err != nil {
+		fmt.Println("Error getting Wireguard public key:", err)
+	}
+
+	wireguardPort, err := getWireguardPort()
+	if err != nil {
+		fmt.Println("Error getting Wireguard port:", err)
+	}
+
+	err = addWireguardPeer(wireguardClientIP, vpnClientPublicKey)
+	if err != nil {
+		http.Error(w, "Error adding Wireguard peer: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	responseDataJson, err := json.Marshal(struct {
+		Message                  string
+		WireguardClientCIDR      string
+		WireguardServerPublicKey string
+		WireguardPort            int
+		WireguardDNS             string
+	}{
+		Message:                  "Connection accepted",
+		WireguardClientCIDR:      getCIDRFromIP(wireguardClientIP),
+		WireguardServerPublicKey: wireguardPublicKey,
+		WireguardPort:            wireguardPort,
+		WireguardDNS:             "1.1.1.1, 8.8.8.8",
+	})
+	if err != nil {
+		http.Error(w, "Error generating response: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.WriteHeader(http.StatusOK)
+	w.Write(responseDataJson)
 }
 
 func verifySignature(message, sigHex string) (string, error) {
@@ -287,25 +358,44 @@ func verifySignature(message, sigHex string) (string, error) {
 	return recoveredAddr, nil
 }
 
-func connectionExists(vpnClientPublicKey string) bool {
+func connectionExists(walletAddress string) bool {
 	for _, conn := range connections {
-		if conn.vpnClientPublicKey == vpnClientPublicKey {
+		if conn.walletAddress == walletAddress {
 			return true
 		}
 	}
 	return false
 }
 
-func addConnection(connection Connection) {
-	if !connectionExists(connection.vpnClientPublicKey) {
-		connections = append(connections, connection)
+func getConnectionByWalletAddress(walletAddress string) *Connection {
+	for _, conn := range connections {
+		if conn.walletAddress == walletAddress {
+			return &conn
+		}
 	}
-	fmt.Println("Connection count:", len(connections))
+	return nil
+}
+
+func addConnection(walletAddress string, vpnClientPublicKey string) net.IP {
+	if !connectionExists(walletAddress) {
+		ip := allocateIP()
+		connection := Connection{
+			walletAddress:      walletAddress,
+			vpnClientPublicKey: vpnClientPublicKey,
+			ip:                 ip,
+		}
+		connections = append(connections, connection)
+		fmt.Println("Connection count:", len(connections))
+		return ip
+	}
+	fmt.Println("Connection already exists for wallet address:", walletAddress)
+	return nil
 }
 
 func removeConnection(recoveredAddr string) {
 	for i, conn := range connections {
 		if conn.walletAddress == recoveredAddr {
+			releaseIP(conn.ip)
 			connections = append(connections[:i], connections[i+1:]...)
 			break
 		}

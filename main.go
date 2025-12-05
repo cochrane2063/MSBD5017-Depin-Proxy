@@ -13,6 +13,8 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"sync"
+	"time"
 
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/common/hexutil"
@@ -25,9 +27,12 @@ import (
 )
 
 type Connection struct {
-	walletAddress      string
-	vpnClientPublicKey string
-	ip                 net.IP
+	walletAddress        string
+	vpnClientPublicKey   string
+	ip                   net.IP
+	receivedNonce        *big.Int
+	connectionStartTime  *big.Int
+	agreedPricePerMinute *big.Int
 }
 
 type NodeInfo struct {
@@ -54,7 +59,14 @@ var client *ethclient.Client
 var walletPrivateKey *ecdsa.PrivateKey
 var walletAddress common.Address
 
-var connections []Connection
+type ProtectedConnections struct {
+	mu          sync.RWMutex
+	connections []Connection
+}
+
+var protectedConnections ProtectedConnections = ProtectedConnections{
+	connections: make([]Connection, 0),
+}
 
 func dialogue() {
 	reader := bufio.NewReader(os.Stdin)
@@ -104,7 +116,7 @@ func dialogue() {
 			updateNodePrice(clearnet_instance, client, getAuth(client, walletPrivateKey, walletAddress), newPrice)
 		case "status":
 			fmt.Println("Connection Status:")
-			fmt.Println("Current Connections:", len(connections))
+			fmt.Println("Current Connections:", protectedConnections.getConnectionsCount())
 			nodeInfo, err := getNodeStatus(clearnet_instance, walletAddress)
 			if err != nil {
 				fmt.Println("Error getting node status:", err)
@@ -156,9 +168,10 @@ func main() {
 	updateChanges()
 
 	go dialogue()
+	go disconnectWatcher()
 
 	http.HandleFunc("/connect", connectionHandler)
-	http.HandleFunc("/disconnect", disconectHandler)
+	// http.HandleFunc("/disconnect", disconectHandler)
 
 	fmt.Println("LocalIP:", ip.String())
 	http.ListenAndServe(":"+strconv.Itoa(port), nil)
@@ -186,69 +199,108 @@ func main() {
 // 	return false
 // }
 
-func isValidNonce(nonce *big.Int) bool {
-	currentNonce, err := getCurrentNonce(clearnet_instance, walletAddress)
+func isValidNonce(nonce *big.Int, clientAddress common.Address) bool {
+	currentNonce, err := getCurrentNonce(clearnet_instance, clientAddress)
 	if err != nil {
 		fmt.Println("Error getting current nonce:", err)
 		return false
 	}
-	if nonce.Cmp(new(big.Int).Add(currentNonce, big.NewInt(1))) == 0 {
-		return true
-	}
-	return false
+	return nonce.Cmp(new(big.Int).Add(currentNonce, big.NewInt(1))) == 0
 }
 
-func disconectHandler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	if r.Method != http.MethodPost {
-		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
-		return
-	}
+func disconnectWatcher() {
+	for {
+		time.Sleep(60 * time.Second)
+		currentTime := big.NewInt(time.Now().Unix())
+		for i := 0; i < protectedConnections.getConnectionsCount(); i++ {
+			conn := protectedConnections.getConnection(i)
+			elapsedMinutes := new(big.Int).Div(new(big.Int).Sub(currentTime, conn.connectionStartTime), big.NewInt(60))
+			totalCost := new(big.Int).Mul(elapsedMinutes, conn.agreedPricePerMinute)
+			paymentChannel, err := getPaymentChannelInfo(clearnet_instance, common.HexToAddress(conn.walletAddress))
+			if err != nil {
+				fmt.Println("Error getting payment channel info:", err)
+				continue
+			}
 
-	body, err := io.ReadAll(r.Body)
-	if err != nil {
-		http.Error(w, "Error reading request body", http.StatusInternalServerError)
-		return
-	}
+			if conn.receivedNonce.Cmp(new(big.Int).Add(paymentChannel.nonce, big.NewInt(1))) != 0 {
+				err = removeWireguardPeer(conn.vpnClientPublicKey)
+				if err != nil {
+					fmt.Println("Error removing Wireguard peer:", err)
+					continue
+				}
+				protectedConnections.removeConnection(conn.walletAddress)
+				fmt.Println("Client nonce increased")
+				fmt.Println("Connection count:", protectedConnections.getConnectionsCount())
+				i--
+				continue
+			}
 
-	bodyStr := string(body)
-	s := strings.Split(bodyStr, "\n")
-	nonce, ok := new(big.Int).SetString(s[0], 10)
-	if !ok {
-		http.Error(w, "Invalid nonce format", http.StatusBadRequest)
-		return
+			if paymentChannel.balance.Cmp(totalCost) == -1 {
+				fmt.Println("Disconnecting wallet address due to insufficient balance:", conn.walletAddress)
+				err = removeWireguardPeer(conn.vpnClientPublicKey)
+				if err != nil {
+					fmt.Println("Error removing Wireguard peer:", err)
+					continue
+				}
+				protectedConnections.removeConnection(conn.walletAddress)
+				fmt.Println("Connection count:", protectedConnections.getConnectionsCount())
+				i--
+			}
+		}
 	}
-	signature := s[1]
-	if !isValidNonce(nonce) {
-		http.Error(w, "Invalid or reused nonce", http.StatusBadRequest)
-		return
-	}
-	recoveredAddr, err := verifySignature(nonce.String(), signature)
-	if err != nil {
-		http.Error(w, "Error verifying signature: "+err.Error(), http.StatusBadRequest)
-		return
-	}
-	fmt.Println("Disconnecting Wallet Address: ", recoveredAddr)
-
-	connection := getConnectionByWalletAddress(recoveredAddr)
-	if connection == nil {
-		http.Error(w, "No active connection found for this wallet address", http.StatusBadRequest)
-		return
-	}
-
-	err = removeWireguardPeer(connection.vpnClientPublicKey)
-	if err != nil {
-		http.Error(w, "Error removing Wireguard peer: "+err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	removeConnection(recoveredAddr)
-
-	fmt.Println("Connection count:", len(connections))
-
-	w.WriteHeader(http.StatusOK)
-	w.Write([]byte("Disconnected"))
 }
+
+// func disconectHandler(w http.ResponseWriter, r *http.Request) {
+// 	w.Header().Set("Access-Control-Allow-Origin", "*")
+// 	if r.Method != http.MethodPost {
+// 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+// 		return
+// 	}
+
+// 	body, err := io.ReadAll(r.Body)
+// 	if err != nil {
+// 		http.Error(w, "Error reading request body", http.StatusInternalServerError)
+// 		return
+// 	}
+
+// 	bodyStr := string(body)
+// 	s := strings.Split(bodyStr, "\n")
+// 	nonce, ok := new(big.Int).SetString(s[0], 10)
+// 	if !ok {
+// 		http.Error(w, "Invalid nonce format", http.StatusBadRequest)
+// 		return
+// 	}
+// 	signature := s[1]
+// 	recoveredAddr, err := verifySignature(nonce.String(), signature)
+// 	if err != nil {
+// 		http.Error(w, "Error verifying signature: "+err.Error(), http.StatusBadRequest)
+// 		return
+// 	}
+// 	if !isValidNonce(nonce, common.HexToAddress(recoveredAddr)) {
+// 		http.Error(w, "Invalid or reused nonce", http.StatusBadRequest)
+// 		return
+// 	}
+// 	fmt.Println("Disconnecting Wallet Address: ", recoveredAddr)
+
+// 	connection := protectedConnections.getConnectionByWalletAddress(recoveredAddr)
+// 	if connection == nil {
+// 		http.Error(w, "No active connection found for this wallet address", http.StatusBadRequest)
+// 		return
+// 	}
+
+// 	err = removeWireguardPeer(connection.vpnClientPublicKey)
+// 	if err != nil {
+// 		http.Error(w, "Error removing Wireguard peer: "+err.Error(), http.StatusInternalServerError)
+// 		return
+// 	}
+
+// 	protectedConnections.removeConnection(recoveredAddr)
+
+// 	fmt.Println("Connection count:", protectedConnections.getConnectionsCount())
+
+// 	w.WriteHeader(http.StatusOK)
+// 	w.Write([]byte("Disconnected"))
+// }
 
 func connectionHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
@@ -271,22 +323,37 @@ func connectionHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	vpnClientPublicKey := s[1]
-	signature := s[2]
+	connectionStartTime, ok := new(big.Int).SetString(s[2], 10)
+	if !ok {
+		http.Error(w, "Invalid connection start time format", http.StatusBadRequest)
+		return
+	}
+	currentTime := big.NewInt(time.Now().Unix())
+	if currentTime.Cmp(connectionStartTime) == -1 {
+		http.Error(w, "Connection start time is in the future", http.StatusBadRequest)
+		return
+	}
+
+	pricePerMinute, ok := new(big.Int).SetString(s[3], 10)
+	if !ok {
+		http.Error(w, "Invalid price per minute format", http.StatusBadRequest)
+		return
+	}
+	signature := s[4]
 	fmt.Println("VPN Client Public Key:", vpnClientPublicKey)
 	fmt.Println("Signature:", signature)
 
-	if !isValidNonce(nonce) {
-		http.Error(w, "Invalid or reused nonce", http.StatusBadRequest)
-		return
-	}
-	recoveredAddr, err := verifySignature(nonce.String()+vpnClientPublicKey, signature)
+	recoveredAddr, err := verifySignature(nonce.String()+vpnClientPublicKey+connectionStartTime.String()+pricePerMinute.String(), signature)
 	if err != nil {
 		http.Error(w, "Error verifying signature: "+err.Error(), http.StatusBadRequest)
 		return
 	}
 	fmt.Println("Wallet Address:", recoveredAddr)
-
-	if connectionExists(recoveredAddr) {
+	if !isValidNonce(nonce, common.HexToAddress(recoveredAddr)) {
+		http.Error(w, "Invalid or reused nonce", http.StatusBadRequest)
+		return
+	}
+	if protectedConnections.connectionExists(recoveredAddr) {
 		http.Error(w, "Connection already exists", http.StatusBadRequest)
 		return
 	}
@@ -300,7 +367,7 @@ func connectionHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Client not registered", http.StatusBadRequest)
 		return
 	}
-	wireguardClientIP := addConnection(recoveredAddr, vpnClientPublicKey)
+	wireguardClientIP := protectedConnections.addConnection(recoveredAddr, vpnClientPublicKey, nonce, connectionStartTime, pricePerMinute)
 
 	wireguardPublicKey, err := getWireguardPublicKey()
 	if err != nil {
@@ -318,18 +385,26 @@ func connectionHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	nodeSignature, err := signMessage(nonce.String() + connectionStartTime.String() + pricePerMinute.String())
+	if err != nil {
+		http.Error(w, "Error signing message: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+
 	responseDataJson, err := json.Marshal(struct {
 		Message                  string
 		WireguardClientCIDR      string
 		WireguardServerPublicKey string
 		WireguardPort            int
 		WireguardDNS             string
+		NodeSignature            string
 	}{
 		Message:                  "Connection accepted",
 		WireguardClientCIDR:      getCIDRFromIP(wireguardClientIP),
 		WireguardServerPublicKey: wireguardPublicKey,
 		WireguardPort:            wireguardPort,
 		WireguardDNS:             "1.1.1.1, 8.8.8.8",
+		NodeSignature:            nodeSignature,
 	})
 	if err != nil {
 		http.Error(w, "Error generating response: "+err.Error(), http.StatusInternalServerError)
@@ -337,6 +412,16 @@ func connectionHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	w.WriteHeader(http.StatusOK)
 	w.Write(responseDataJson)
+}
+
+func signMessage(message string) (string, error) {
+	prefixedMessage := fmt.Sprintf("\x19Ethereum Signed Message:\n%d%s", len(message), message)
+	messageHash := crypto.Keccak256Hash([]byte(prefixedMessage))
+	signature, err := crypto.Sign(messageHash.Bytes(), walletPrivateKey)
+	if err != nil {
+		return "", err
+	}
+	return hexutil.Encode(signature), nil
 }
 
 func verifySignature(message, sigHex string) (string, error) {
@@ -364,7 +449,7 @@ func verifySignature(message, sigHex string) (string, error) {
 	return recoveredAddr, nil
 }
 
-func connectionExists(walletAddress string) bool {
+func _connectionExists(walletAddress string, connections []Connection) bool {
 	for _, conn := range connections {
 		if conn.walletAddress == walletAddress {
 			return true
@@ -373,8 +458,16 @@ func connectionExists(walletAddress string) bool {
 	return false
 }
 
-func getConnectionByWalletAddress(walletAddress string) *Connection {
-	for _, conn := range connections {
+func (c *ProtectedConnections) connectionExists(walletAddress string) bool {
+	c.mu.RLock()
+	defer c.mu.RUnlock()
+	return _connectionExists(walletAddress, c.connections)
+}
+
+func (c *ProtectedConnections) getConnectionByWalletAddress(walletAddress string) *Connection {
+	c.mu.RLock()
+	defer c.mu.RUnlock()
+	for _, conn := range c.connections {
 		if conn.walletAddress == walletAddress {
 			return &conn
 		}
@@ -382,27 +475,46 @@ func getConnectionByWalletAddress(walletAddress string) *Connection {
 	return nil
 }
 
-func addConnection(walletAddress string, vpnClientPublicKey string) net.IP {
-	if !connectionExists(walletAddress) {
+func (c *ProtectedConnections) getConnection(i int) Connection {
+	c.mu.RLock()
+	defer c.mu.RUnlock()
+	return c.connections[i]
+}
+
+func (c *ProtectedConnections) getConnectionsCount() int {
+	c.mu.RLock()
+	defer c.mu.RUnlock()
+	return len(c.connections)
+}
+
+func (c *ProtectedConnections) addConnection(walletAddress string, vpnClientPublicKey string, receivedNonce *big.Int, connectionStartTime *big.Int, pricePerMinute *big.Int) net.IP {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	if !_connectionExists(walletAddress, c.connections) {
 		ip := allocateIP()
 		connection := Connection{
-			walletAddress:      walletAddress,
-			vpnClientPublicKey: vpnClientPublicKey,
-			ip:                 ip,
+			walletAddress:        walletAddress,
+			vpnClientPublicKey:   vpnClientPublicKey,
+			ip:                   ip,
+			receivedNonce:        receivedNonce,
+			connectionStartTime:  connectionStartTime,
+			agreedPricePerMinute: pricePerMinute,
 		}
-		connections = append(connections, connection)
-		fmt.Println("Connection count:", len(connections))
+		c.connections = append(c.connections, connection)
+		fmt.Println("Connection count:", len(c.connections))
 		return ip
 	}
 	fmt.Println("Connection already exists for wallet address:", walletAddress)
 	return nil
 }
 
-func removeConnection(recoveredAddr string) {
-	for i, conn := range connections {
+func (c *ProtectedConnections) removeConnection(recoveredAddr string) {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	for i, conn := range c.connections {
 		if conn.walletAddress == recoveredAddr {
 			releaseIP(conn.ip)
-			connections = append(connections[:i], connections[i+1:]...)
+			c.connections = append(c.connections[:i], c.connections[i+1:]...)
 			break
 		}
 	}

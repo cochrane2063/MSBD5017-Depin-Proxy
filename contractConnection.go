@@ -46,11 +46,6 @@ func initContract() (*clrtoken.Clrtoken, *clearnet.Clearnet, *ethclient.Client, 
 		return nil, nil, nil, err
 	}
 
-	// blockNumber, err := client.BlockNumber(context.Background())
-	// if err != nil {
-	// 	return nil, nil, err
-	// }
-
 	clearnet_address := common.HexToAddress(os.Getenv("CLEARNET_CONTRACT_ADDRESS"))
 	clearnet_instance, err := clearnet.NewClearnet(clearnet_address, client)
 	if err != nil {
@@ -63,7 +58,6 @@ func initContract() (*clrtoken.Clrtoken, *clearnet.Clearnet, *ethclient.Client, 
 		return nil, nil, nil, err
 	}
 
-	// fmt.Println("Latest Block Number:", blockNumber)
 	return clrtoken_instance, clearnet_instance, client, nil
 }
 

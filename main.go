@@ -54,7 +54,6 @@ var client *ethclient.Client
 var walletPrivateKey *ecdsa.PrivateKey
 var walletAddress common.Address
 
-var ivs []string
 var connections []Connection
 
 func dialogue() {
@@ -165,36 +164,42 @@ func main() {
 	http.ListenAndServe(":"+strconv.Itoa(port), nil)
 }
 
-func generateIV() string {
-	key, err := crypto.GenerateKey()
-	if err != nil {
-		log.Fatal(err)
-	}
-	iv := crypto.FromECDSA(key)
-	ivs = append(ivs, hexutil.Encode(iv))
-	fmt.Println("Generated IV:", hexutil.Encode(iv))
-	return hexutil.Encode(iv)
-}
+// func generateIV() string {
+// 	key, err := crypto.GenerateKey()
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
+// 	iv := crypto.FromECDSA(key)
+// 	ivs = append(ivs, hexutil.Encode(iv))
+// 	fmt.Println("Generated IV:", hexutil.Encode(iv))
+// 	return hexutil.Encode(iv)
+// }
 
-func isValidIV(iv string) bool {
-	for i, v := range ivs {
-		if v == iv {
-			fmt.Println("Valid IV:", iv)
-			ivs = append(ivs[:i], ivs[i+1:]...)
-			return true
-		}
+// func isValidIV(iv string) bool {
+// 	for i, v := range ivs {
+// 		if v == iv {
+// 			fmt.Println("Valid IV:", iv)
+// 			ivs = append(ivs[:i], ivs[i+1:]...)
+// 			return true
+// 		}
+// 	}
+// 	return false
+// }
+
+func isValidNonce(nonce *big.Int) bool {
+	currentNonce, err := getCurrentNonce(clearnet_instance, walletAddress)
+	if err != nil {
+		fmt.Println("Error getting current nonce:", err)
+		return false
+	}
+	if nonce.Cmp(currentNonce) == 1 {
+		return true
 	}
 	return false
 }
 
 func disconectHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
-	if r.Method == http.MethodGet {
-		iv := generateIV()
-		w.WriteHeader(http.StatusOK)
-		w.Write([]byte(iv))
-		return
-	}
 	if r.Method != http.MethodPost {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
@@ -208,14 +213,17 @@ func disconectHandler(w http.ResponseWriter, r *http.Request) {
 
 	bodyStr := string(body)
 	s := strings.Split(bodyStr, "\n")
-	iv := s[0]
-	signature := s[1]
-
-	if !isValidIV(iv) {
-		http.Error(w, "Invalid or reused IV", http.StatusBadRequest)
+	nonce, ok := new(big.Int).SetString(s[0], 10)
+	if !ok {
+		http.Error(w, "Invalid nonce format", http.StatusBadRequest)
 		return
 	}
-	recoveredAddr, err := verifySignature(iv, signature)
+	signature := s[1]
+	if !isValidNonce(nonce) {
+		http.Error(w, "Invalid or reused nonce", http.StatusBadRequest)
+		return
+	}
+	recoveredAddr, err := verifySignature(nonce.String(), signature)
 	if err != nil {
 		http.Error(w, "Error verifying signature: "+err.Error(), http.StatusBadRequest)
 		return
@@ -244,12 +252,6 @@ func disconectHandler(w http.ResponseWriter, r *http.Request) {
 
 func connectionHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
-	if r.Method == http.MethodGet {
-		iv := generateIV()
-		w.WriteHeader(http.StatusOK)
-		w.Write([]byte(iv))
-		return
-	}
 	if r.Method != http.MethodPost {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
@@ -263,17 +265,21 @@ func connectionHandler(w http.ResponseWriter, r *http.Request) {
 
 	bodyStr := string(body)
 	s := strings.Split(bodyStr, "\n")
-	iv := s[0]
+	nonce, ok := new(big.Int).SetString(s[0], 10)
+	if !ok {
+		http.Error(w, "Invalid nonce format", http.StatusBadRequest)
+		return
+	}
 	vpnClientPublicKey := s[1]
 	signature := s[2]
 	fmt.Println("VPN Client Public Key:", vpnClientPublicKey)
 	fmt.Println("Signature:", signature)
 
-	if !isValidIV(iv) {
-		http.Error(w, "Invalid or reused IV", http.StatusBadRequest)
+	if !isValidNonce(nonce) {
+		http.Error(w, "Invalid or reused nonce", http.StatusBadRequest)
 		return
 	}
-	recoveredAddr, err := verifySignature(iv+vpnClientPublicKey, signature)
+	recoveredAddr, err := verifySignature(nonce.String()+vpnClientPublicKey, signature)
 	if err != nil {
 		http.Error(w, "Error verifying signature: "+err.Error(), http.StatusBadRequest)
 		return

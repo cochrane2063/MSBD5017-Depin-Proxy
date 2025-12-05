@@ -219,3 +219,12 @@ func getPaymentChannelInfo(clearnet_instance *clearnet.Clearnet, clientAddress c
 		isActive: channelInfo.IsActive,
 	}, nil
 }
+
+func getCurrentNonce(clearnet_instance *clearnet.Clearnet, clientAddress common.Address) (*big.Int, error) {
+	paymentChannel, err := getPaymentChannelInfo(clearnet_instance, clientAddress)
+	if err != nil {
+		return nil, fmt.Errorf("getCurrentNonce error: %w", err)
+	}
+	nonce := paymentChannel.nonce
+	return nonce, nil
+}

@@ -72,8 +72,11 @@ func getAuth(client *ethclient.Client, walletPrivateKey *ecdsa.PrivateKey, walle
 		log.Fatal(err)
 	}
 
-	chainID := big.NewInt(11155111)
-	auth, err := bind.NewKeyedTransactorWithChainID(walletPrivateKey, chainID)
+	chainIDInt, ok := new(big.Int).SetString(os.Getenv("CHAIN_ID"), 10)
+	if !ok {
+		log.Fatal("Invalid CHAIN_ID")
+	}
+	auth, err := bind.NewKeyedTransactorWithChainID(walletPrivateKey, chainIDInt)
 	if err != nil {
 		log.Fatal(err)
 	}

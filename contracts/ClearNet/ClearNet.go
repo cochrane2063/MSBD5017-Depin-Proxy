@@ -31,7 +31,7 @@ var (
 
 // ClearnetMetaData contains all meta data concerning the Clearnet contract.
 var ClearnetMetaData = &bind.MetaData{
-	ABI: "[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_clrToken\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"}],\"name\":\"OwnableInvalidOwner\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"OwnableUnauthorizedAccount\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"ReentrancyGuardReentrantCall\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"}],\"name\":\"SafeERC20FailedOperation\",\"type\":\"error\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"currentGovernance\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"pendingGovernance\",\"type\":\"address\"}],\"name\":\"GovernanceTransferInitiated\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"previousGovernance\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"newGovernance\",\"type\":\"address\"}],\"name\":\"GovernanceTransferred\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"nodeID\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"returnedStake\",\"type\":\"uint256\"}],\"name\":\"NodeDeregistered\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"nodeID\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"newPricePerMinute\",\"type\":\"uint256\"}],\"name\":\"NodePriceUpdated\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"nodeID\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"ipAddress\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"uint16\",\"name\":\"port\",\"type\":\"uint16\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"pricePerMinute\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"stakeAmount\",\"type\":\"uint256\"}],\"name\":\"NodeRegistered\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"nodeID\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"slashAmount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"remainingStake\",\"type\":\"uint256\"}],\"name\":\"NodeSlashed\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"nodeID\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"newIp\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"uint16\",\"name\":\"newPort\",\"type\":\"uint16\"}],\"name\":\"NodeUpdated\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"previousOwner\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"OwnershipTransferred\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"Paused\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"client\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"refundAmount\",\"type\":\"uint256\"}],\"name\":\"PaymentChannelClosed\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"client\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"PaymentChannelOpened\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"client\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"newBalance\",\"type\":\"uint256\"}],\"name\":\"PaymentChannelToppedUp\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"client\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"nodeID\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"minutesUsed\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"nodeShare\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"treasuryShare\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"relayShare\",\"type\":\"uint256\"}],\"name\":\"PaymentProcessed\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"relay\",\"type\":\"address\"}],\"name\":\"RelayOperatorAdded\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"relay\",\"type\":\"address\"}],\"name\":\"RelayOperatorRemoved\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"nodeID\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"newScore\",\"type\":\"uint256\"}],\"name\":\"ReputationUpdated\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"Unpaused\",\"type\":\"event\"},{\"inputs\":[],\"name\":\"INITIAL_REPUTATION\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"MAX_MINUTES_PER_PAYMENT\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"MAX_PRICE_PER_MIN\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"MAX_REPUTATION\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"MIN_CHANNEL_BALANCE\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"MIN_PRICE_PER_MIN\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"MIN_STAKE\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"MIN_STAKE_THRESHOLD\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"NODE_SHARE\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"RELAY_SHARE\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"REPUTATION_DECREMENT\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"REPUTATION_INCREMENT\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"REPUTATION_PRECISION\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"SHARE_DENOMINATOR\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"TREASURY_SHARE\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"acceptGovernanceTransfer\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"activeChannelIds\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"activeNodeIds\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_relay\",\"type\":\"address\"}],\"name\":\"addRelayOperator\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_nodeID\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"_minutesUsed\",\"type\":\"uint256\"}],\"name\":\"calculateCost\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"closePaymentChannel\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"clrToken\",\"outputs\":[{\"internalType\":\"contractIERC20\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"deregisterNode\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getActiveNodes\",\"outputs\":[{\"internalType\":\"address[]\",\"name\":\"\",\"type\":\"address[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_offset\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"_limit\",\"type\":\"uint256\"}],\"name\":\"getActiveNodesPaginated\",\"outputs\":[{\"internalType\":\"address[]\",\"name\":\"nodes\",\"type\":\"address[]\"},{\"internalType\":\"uint256\",\"name\":\"total\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getActivePaymentChannels\",\"outputs\":[{\"internalType\":\"address[]\",\"name\":\"\",\"type\":\"address[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_offset\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"_limit\",\"type\":\"uint256\"}],\"name\":\"getActivePaymentChannelsPaginated\",\"outputs\":[{\"internalType\":\"address[]\",\"name\":\"channels\",\"type\":\"address[]\"},{\"internalType\":\"uint256\",\"name\":\"total\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_nodeID\",\"type\":\"address\"}],\"name\":\"getNodeInfo\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"ipAddress\",\"type\":\"string\"},{\"internalType\":\"uint16\",\"name\":\"port\",\"type\":\"uint16\"},{\"internalType\":\"uint256\",\"name\":\"pricePerMinute\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"reputationScore\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"totalMinutesServed\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"totalEarnings\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_client\",\"type\":\"address\"}],\"name\":\"getPaymentChannelInfo\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"balance\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"isActive\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"governanceContract\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_newGovernance\",\"type\":\"address\"}],\"name\":\"initiateGovernanceTransfer\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_address\",\"type\":\"address\"}],\"name\":\"isRelayOperator\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"nodes\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"ipAddress\",\"type\":\"string\"},{\"internalType\":\"uint16\",\"name\":\"port\",\"type\":\"uint16\"},{\"internalType\":\"bool\",\"name\":\"isActive\",\"type\":\"bool\"},{\"internalType\":\"uint256\",\"name\":\"stakeAmount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"reputationScore\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"pricePerMinute\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"totalMinutesServed\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"totalEarnings\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"lastActivity\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_amount\",\"type\":\"uint256\"}],\"name\":\"openPaymentChannel\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"owner\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"pause\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"paused\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"paymentChannels\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"balance\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"isActive\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"pendingGovernance\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_client\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"_node\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"_minutesUsed\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"_nonce\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"_clientSignature\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"_nodeSignature\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"_relaySignature\",\"type\":\"bytes\"}],\"name\":\"processPayment\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"_ipAddress\",\"type\":\"string\"},{\"internalType\":\"uint16\",\"name\":\"_port\",\"type\":\"uint16\"},{\"internalType\":\"uint256\",\"name\":\"_pricePerMinute\",\"type\":\"uint256\"}],\"name\":\"registerNode\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"relayOperators\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_relay\",\"type\":\"address\"}],\"name\":\"removeRelayOperator\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"renounceOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_nodeID\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"_slashAmount\",\"type\":\"uint256\"}],\"name\":\"slashNode\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_amount\",\"type\":\"uint256\"}],\"name\":\"topUpPaymentChannel\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"totalBandwidthMinutes\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"totalProtocolFees\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"transferOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"unpause\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"_newIpAddress\",\"type\":\"string\"},{\"internalType\":\"uint16\",\"name\":\"_newPort\",\"type\":\"uint16\"}],\"name\":\"updateNodeInfo\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_newPricePerMinute\",\"type\":\"uint256\"}],\"name\":\"updatePrice\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_nodeID\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"_successfulSession\",\"type\":\"bool\"}],\"name\":\"updateReputation\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"name\":\"usedSignatures\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_amount\",\"type\":\"uint256\"}],\"name\":\"withdrawTreasuryFunds\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}]",
+	ABI: "[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_clrToken\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"}],\"name\":\"OwnableInvalidOwner\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"OwnableUnauthorizedAccount\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"ReentrancyGuardReentrantCall\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"}],\"name\":\"SafeERC20FailedOperation\",\"type\":\"error\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"client\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"connectionStartTime\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"abortTime\",\"type\":\"uint256\"}],\"name\":\"ConnectionAborted\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"currentGovernance\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"pendingGovernance\",\"type\":\"address\"}],\"name\":\"GovernanceTransferInitiated\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"previousGovernance\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"newGovernance\",\"type\":\"address\"}],\"name\":\"GovernanceTransferred\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"nodeID\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"returnedStake\",\"type\":\"uint256\"}],\"name\":\"NodeDeregistered\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"nodeID\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"newPricePerMinute\",\"type\":\"uint256\"}],\"name\":\"NodePriceUpdated\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"nodeID\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"ipAddress\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"uint16\",\"name\":\"port\",\"type\":\"uint16\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"pricePerMinute\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"stakeAmount\",\"type\":\"uint256\"}],\"name\":\"NodeRegistered\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"nodeID\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"slashAmount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"remainingStake\",\"type\":\"uint256\"}],\"name\":\"NodeSlashed\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"nodeID\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"newIp\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"uint16\",\"name\":\"newPort\",\"type\":\"uint16\"}],\"name\":\"NodeUpdated\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"ownerAccount\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"OwnerShareAccrued\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"previousOwner\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"OwnershipTransferred\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"Paused\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"client\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"refundAmount\",\"type\":\"uint256\"}],\"name\":\"PaymentChannelClosed\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"client\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"PaymentChannelOpened\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"client\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"newBalance\",\"type\":\"uint256\"}],\"name\":\"PaymentChannelToppedUp\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"client\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"nodeID\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"minutesUsed\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"nodeShare\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"treasuryShare\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"ownerShare\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"bool\",\"name\":\"ratingProvided\",\"type\":\"bool\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"rating\",\"type\":\"uint256\"}],\"name\":\"PaymentProcessed\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"nodeID\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"newScore\",\"type\":\"uint256\"}],\"name\":\"ReputationUpdated\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"Unpaused\",\"type\":\"event\"},{\"inputs\":[],\"name\":\"ABORT_WINDOW\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"INITIAL_REPUTATION\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"MAX_MINUTES_PER_PAYMENT\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"MAX_PRICE_PER_MIN\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"MAX_REPUTATION\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"MIN_CHANNEL_BALANCE\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"MIN_PRICE_PER_MIN\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"MIN_STAKE\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"MIN_STAKE_THRESHOLD\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"NODE_SHARE\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"OWNER_SHARE\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"SHARE_DENOMINATOR\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"TREASURY_SHARE\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"vpnClientPublicKey\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"_connectionStartTime\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"_agreedPricePerMinute\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"_clientSignature\",\"type\":\"bytes\"}],\"name\":\"abortConnection\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"acceptGovernanceTransfer\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"activeChannelIds\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"activeNodeIds\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_nodeID\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"_minutesUsed\",\"type\":\"uint256\"}],\"name\":\"calculateCost\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"closePaymentChannel\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"clrToken\",\"outputs\":[{\"internalType\":\"contractIERC20\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"deregisterNode\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getActiveNodes\",\"outputs\":[{\"internalType\":\"address[]\",\"name\":\"\",\"type\":\"address[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_offset\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"_limit\",\"type\":\"uint256\"}],\"name\":\"getActiveNodesPaginated\",\"outputs\":[{\"internalType\":\"address[]\",\"name\":\"nodeAddresses\",\"type\":\"address[]\"},{\"internalType\":\"uint256\",\"name\":\"total\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getActivePaymentChannels\",\"outputs\":[{\"internalType\":\"address[]\",\"name\":\"\",\"type\":\"address[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_offset\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"_limit\",\"type\":\"uint256\"}],\"name\":\"getActivePaymentChannelsPaginated\",\"outputs\":[{\"internalType\":\"address[]\",\"name\":\"channels\",\"type\":\"address[]\"},{\"internalType\":\"uint256\",\"name\":\"total\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getContractStats\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"totalNodes\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"totalChannels\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"totalMinutes\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"treasuryBalance\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_nodeID\",\"type\":\"address\"}],\"name\":\"getNodeInfo\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"ipAddress\",\"type\":\"string\"},{\"internalType\":\"uint16\",\"name\":\"port\",\"type\":\"uint16\"},{\"internalType\":\"uint256\",\"name\":\"pricePerMinute\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"reputationScore\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"totalMinutesServed\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"totalEarnings\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_client\",\"type\":\"address\"}],\"name\":\"getPaymentChannelInfo\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"balance\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"isActive\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"governanceContract\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_newGovernance\",\"type\":\"address\"}],\"name\":\"initiateGovernanceTransfer\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"_messageHash\",\"type\":\"bytes32\"}],\"name\":\"isSignatureUsed\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"nodes\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"ipAddress\",\"type\":\"string\"},{\"internalType\":\"uint16\",\"name\":\"port\",\"type\":\"uint16\"},{\"internalType\":\"bool\",\"name\":\"isActive\",\"type\":\"bool\"},{\"internalType\":\"uint256\",\"name\":\"stakeAmount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"reputationScore\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"pricePerMinute\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"totalMinutesServed\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"totalEarnings\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"lastActivity\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"totalRatingValue\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"totalRatingCount\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_amount\",\"type\":\"uint256\"}],\"name\":\"openPaymentChannel\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"owner\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"pause\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"paused\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"paymentChannels\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"balance\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"isActive\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"pendingGovernance\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_client\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"_node\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"vpnClientPublicKey\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"_connectionStartTime\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"_agreedPricePerMinute\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"_ratingProvided\",\"type\":\"bool\"},{\"internalType\":\"uint256\",\"name\":\"_rating\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"_clientSignature\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"_nodeSignature\",\"type\":\"bytes\"}],\"name\":\"processPayment\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"_ipAddress\",\"type\":\"string\"},{\"internalType\":\"uint16\",\"name\":\"_port\",\"type\":\"uint16\"},{\"internalType\":\"uint256\",\"name\":\"_pricePerMinute\",\"type\":\"uint256\"}],\"name\":\"registerNode\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"renounceOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_nodeID\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"_slashAmount\",\"type\":\"uint256\"}],\"name\":\"slashNode\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_amount\",\"type\":\"uint256\"}],\"name\":\"topUpPaymentChannel\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"totalBandwidthMinutes\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"totalProtocolFees\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"transferOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"unpause\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"_newIpAddress\",\"type\":\"string\"},{\"internalType\":\"uint16\",\"name\":\"_newPort\",\"type\":\"uint16\"}],\"name\":\"updateNodeInfo\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_newPricePerMinute\",\"type\":\"uint256\"}],\"name\":\"updatePrice\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"name\":\"usedSignatures\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_amount\",\"type\":\"uint256\"}],\"name\":\"withdrawTreasuryFunds\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}]",
 }
 
 // ClearnetABI is the input ABI used to generate the binding from.
@@ -178,6 +178,37 @@ func (_Clearnet *ClearnetTransactorRaw) Transfer(opts *bind.TransactOpts) (*type
 // Transact invokes the (paid) contract method with params as input values.
 func (_Clearnet *ClearnetTransactorRaw) Transact(opts *bind.TransactOpts, method string, params ...interface{}) (*types.Transaction, error) {
 	return _Clearnet.Contract.contract.Transact(opts, method, params...)
+}
+
+// ABORTWINDOW is a free data retrieval call binding the contract method 0xdac76b08.
+//
+// Solidity: function ABORT_WINDOW() view returns(uint256)
+func (_Clearnet *ClearnetCaller) ABORTWINDOW(opts *bind.CallOpts) (*big.Int, error) {
+	var out []interface{}
+	err := _Clearnet.contract.Call(opts, &out, "ABORT_WINDOW")
+
+	if err != nil {
+		return *new(*big.Int), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new(*big.Int)).(**big.Int)
+
+	return out0, err
+
+}
+
+// ABORTWINDOW is a free data retrieval call binding the contract method 0xdac76b08.
+//
+// Solidity: function ABORT_WINDOW() view returns(uint256)
+func (_Clearnet *ClearnetSession) ABORTWINDOW() (*big.Int, error) {
+	return _Clearnet.Contract.ABORTWINDOW(&_Clearnet.CallOpts)
+}
+
+// ABORTWINDOW is a free data retrieval call binding the contract method 0xdac76b08.
+//
+// Solidity: function ABORT_WINDOW() view returns(uint256)
+func (_Clearnet *ClearnetCallerSession) ABORTWINDOW() (*big.Int, error) {
+	return _Clearnet.Contract.ABORTWINDOW(&_Clearnet.CallOpts)
 }
 
 // INITIALREPUTATION is a free data retrieval call binding the contract method 0x7b057258.
@@ -459,12 +490,12 @@ func (_Clearnet *ClearnetCallerSession) NODESHARE() (*big.Int, error) {
 	return _Clearnet.Contract.NODESHARE(&_Clearnet.CallOpts)
 }
 
-// RELAYSHARE is a free data retrieval call binding the contract method 0xe0cb9935.
+// OWNERSHARE is a free data retrieval call binding the contract method 0x6a1c6e78.
 //
-// Solidity: function RELAY_SHARE() view returns(uint256)
-func (_Clearnet *ClearnetCaller) RELAYSHARE(opts *bind.CallOpts) (*big.Int, error) {
+// Solidity: function OWNER_SHARE() view returns(uint256)
+func (_Clearnet *ClearnetCaller) OWNERSHARE(opts *bind.CallOpts) (*big.Int, error) {
 	var out []interface{}
-	err := _Clearnet.contract.Call(opts, &out, "RELAY_SHARE")
+	err := _Clearnet.contract.Call(opts, &out, "OWNER_SHARE")
 
 	if err != nil {
 		return *new(*big.Int), err
@@ -476,111 +507,18 @@ func (_Clearnet *ClearnetCaller) RELAYSHARE(opts *bind.CallOpts) (*big.Int, erro
 
 }
 
-// RELAYSHARE is a free data retrieval call binding the contract method 0xe0cb9935.
+// OWNERSHARE is a free data retrieval call binding the contract method 0x6a1c6e78.
 //
-// Solidity: function RELAY_SHARE() view returns(uint256)
-func (_Clearnet *ClearnetSession) RELAYSHARE() (*big.Int, error) {
-	return _Clearnet.Contract.RELAYSHARE(&_Clearnet.CallOpts)
+// Solidity: function OWNER_SHARE() view returns(uint256)
+func (_Clearnet *ClearnetSession) OWNERSHARE() (*big.Int, error) {
+	return _Clearnet.Contract.OWNERSHARE(&_Clearnet.CallOpts)
 }
 
-// RELAYSHARE is a free data retrieval call binding the contract method 0xe0cb9935.
+// OWNERSHARE is a free data retrieval call binding the contract method 0x6a1c6e78.
 //
-// Solidity: function RELAY_SHARE() view returns(uint256)
-func (_Clearnet *ClearnetCallerSession) RELAYSHARE() (*big.Int, error) {
-	return _Clearnet.Contract.RELAYSHARE(&_Clearnet.CallOpts)
-}
-
-// REPUTATIONDECREMENT is a free data retrieval call binding the contract method 0x2b16d75a.
-//
-// Solidity: function REPUTATION_DECREMENT() view returns(uint256)
-func (_Clearnet *ClearnetCaller) REPUTATIONDECREMENT(opts *bind.CallOpts) (*big.Int, error) {
-	var out []interface{}
-	err := _Clearnet.contract.Call(opts, &out, "REPUTATION_DECREMENT")
-
-	if err != nil {
-		return *new(*big.Int), err
-	}
-
-	out0 := *abi.ConvertType(out[0], new(*big.Int)).(**big.Int)
-
-	return out0, err
-
-}
-
-// REPUTATIONDECREMENT is a free data retrieval call binding the contract method 0x2b16d75a.
-//
-// Solidity: function REPUTATION_DECREMENT() view returns(uint256)
-func (_Clearnet *ClearnetSession) REPUTATIONDECREMENT() (*big.Int, error) {
-	return _Clearnet.Contract.REPUTATIONDECREMENT(&_Clearnet.CallOpts)
-}
-
-// REPUTATIONDECREMENT is a free data retrieval call binding the contract method 0x2b16d75a.
-//
-// Solidity: function REPUTATION_DECREMENT() view returns(uint256)
-func (_Clearnet *ClearnetCallerSession) REPUTATIONDECREMENT() (*big.Int, error) {
-	return _Clearnet.Contract.REPUTATIONDECREMENT(&_Clearnet.CallOpts)
-}
-
-// REPUTATIONINCREMENT is a free data retrieval call binding the contract method 0x3acc361a.
-//
-// Solidity: function REPUTATION_INCREMENT() view returns(uint256)
-func (_Clearnet *ClearnetCaller) REPUTATIONINCREMENT(opts *bind.CallOpts) (*big.Int, error) {
-	var out []interface{}
-	err := _Clearnet.contract.Call(opts, &out, "REPUTATION_INCREMENT")
-
-	if err != nil {
-		return *new(*big.Int), err
-	}
-
-	out0 := *abi.ConvertType(out[0], new(*big.Int)).(**big.Int)
-
-	return out0, err
-
-}
-
-// REPUTATIONINCREMENT is a free data retrieval call binding the contract method 0x3acc361a.
-//
-// Solidity: function REPUTATION_INCREMENT() view returns(uint256)
-func (_Clearnet *ClearnetSession) REPUTATIONINCREMENT() (*big.Int, error) {
-	return _Clearnet.Contract.REPUTATIONINCREMENT(&_Clearnet.CallOpts)
-}
-
-// REPUTATIONINCREMENT is a free data retrieval call binding the contract method 0x3acc361a.
-//
-// Solidity: function REPUTATION_INCREMENT() view returns(uint256)
-func (_Clearnet *ClearnetCallerSession) REPUTATIONINCREMENT() (*big.Int, error) {
-	return _Clearnet.Contract.REPUTATIONINCREMENT(&_Clearnet.CallOpts)
-}
-
-// REPUTATIONPRECISION is a free data retrieval call binding the contract method 0xbae2e378.
-//
-// Solidity: function REPUTATION_PRECISION() view returns(uint256)
-func (_Clearnet *ClearnetCaller) REPUTATIONPRECISION(opts *bind.CallOpts) (*big.Int, error) {
-	var out []interface{}
-	err := _Clearnet.contract.Call(opts, &out, "REPUTATION_PRECISION")
-
-	if err != nil {
-		return *new(*big.Int), err
-	}
-
-	out0 := *abi.ConvertType(out[0], new(*big.Int)).(**big.Int)
-
-	return out0, err
-
-}
-
-// REPUTATIONPRECISION is a free data retrieval call binding the contract method 0xbae2e378.
-//
-// Solidity: function REPUTATION_PRECISION() view returns(uint256)
-func (_Clearnet *ClearnetSession) REPUTATIONPRECISION() (*big.Int, error) {
-	return _Clearnet.Contract.REPUTATIONPRECISION(&_Clearnet.CallOpts)
-}
-
-// REPUTATIONPRECISION is a free data retrieval call binding the contract method 0xbae2e378.
-//
-// Solidity: function REPUTATION_PRECISION() view returns(uint256)
-func (_Clearnet *ClearnetCallerSession) REPUTATIONPRECISION() (*big.Int, error) {
-	return _Clearnet.Contract.REPUTATIONPRECISION(&_Clearnet.CallOpts)
+// Solidity: function OWNER_SHARE() view returns(uint256)
+func (_Clearnet *ClearnetCallerSession) OWNERSHARE() (*big.Int, error) {
+	return _Clearnet.Contract.OWNERSHARE(&_Clearnet.CallOpts)
 }
 
 // SHAREDENOMINATOR is a free data retrieval call binding the contract method 0x7eb11845.
@@ -802,23 +740,23 @@ func (_Clearnet *ClearnetCallerSession) GetActiveNodes() ([]common.Address, erro
 
 // GetActiveNodesPaginated is a free data retrieval call binding the contract method 0x04f4d1b6.
 //
-// Solidity: function getActiveNodesPaginated(uint256 _offset, uint256 _limit) view returns(address[] nodes, uint256 total)
+// Solidity: function getActiveNodesPaginated(uint256 _offset, uint256 _limit) view returns(address[] nodeAddresses, uint256 total)
 func (_Clearnet *ClearnetCaller) GetActiveNodesPaginated(opts *bind.CallOpts, _offset *big.Int, _limit *big.Int) (struct {
-	Nodes []common.Address
-	Total *big.Int
+	NodeAddresses []common.Address
+	Total         *big.Int
 }, error) {
 	var out []interface{}
 	err := _Clearnet.contract.Call(opts, &out, "getActiveNodesPaginated", _offset, _limit)
 
 	outstruct := new(struct {
-		Nodes []common.Address
-		Total *big.Int
+		NodeAddresses []common.Address
+		Total         *big.Int
 	})
 	if err != nil {
 		return *outstruct, err
 	}
 
-	outstruct.Nodes = *abi.ConvertType(out[0], new([]common.Address)).(*[]common.Address)
+	outstruct.NodeAddresses = *abi.ConvertType(out[0], new([]common.Address)).(*[]common.Address)
 	outstruct.Total = *abi.ConvertType(out[1], new(*big.Int)).(**big.Int)
 
 	return *outstruct, err
@@ -827,20 +765,20 @@ func (_Clearnet *ClearnetCaller) GetActiveNodesPaginated(opts *bind.CallOpts, _o
 
 // GetActiveNodesPaginated is a free data retrieval call binding the contract method 0x04f4d1b6.
 //
-// Solidity: function getActiveNodesPaginated(uint256 _offset, uint256 _limit) view returns(address[] nodes, uint256 total)
+// Solidity: function getActiveNodesPaginated(uint256 _offset, uint256 _limit) view returns(address[] nodeAddresses, uint256 total)
 func (_Clearnet *ClearnetSession) GetActiveNodesPaginated(_offset *big.Int, _limit *big.Int) (struct {
-	Nodes []common.Address
-	Total *big.Int
+	NodeAddresses []common.Address
+	Total         *big.Int
 }, error) {
 	return _Clearnet.Contract.GetActiveNodesPaginated(&_Clearnet.CallOpts, _offset, _limit)
 }
 
 // GetActiveNodesPaginated is a free data retrieval call binding the contract method 0x04f4d1b6.
 //
-// Solidity: function getActiveNodesPaginated(uint256 _offset, uint256 _limit) view returns(address[] nodes, uint256 total)
+// Solidity: function getActiveNodesPaginated(uint256 _offset, uint256 _limit) view returns(address[] nodeAddresses, uint256 total)
 func (_Clearnet *ClearnetCallerSession) GetActiveNodesPaginated(_offset *big.Int, _limit *big.Int) (struct {
-	Nodes []common.Address
-	Total *big.Int
+	NodeAddresses []common.Address
+	Total         *big.Int
 }, error) {
 	return _Clearnet.Contract.GetActiveNodesPaginated(&_Clearnet.CallOpts, _offset, _limit)
 }
@@ -919,6 +857,61 @@ func (_Clearnet *ClearnetCallerSession) GetActivePaymentChannelsPaginated(_offse
 	Total    *big.Int
 }, error) {
 	return _Clearnet.Contract.GetActivePaymentChannelsPaginated(&_Clearnet.CallOpts, _offset, _limit)
+}
+
+// GetContractStats is a free data retrieval call binding the contract method 0xdfe6b5d6.
+//
+// Solidity: function getContractStats() view returns(uint256 totalNodes, uint256 totalChannels, uint256 totalMinutes, uint256 treasuryBalance)
+func (_Clearnet *ClearnetCaller) GetContractStats(opts *bind.CallOpts) (struct {
+	TotalNodes      *big.Int
+	TotalChannels   *big.Int
+	TotalMinutes    *big.Int
+	TreasuryBalance *big.Int
+}, error) {
+	var out []interface{}
+	err := _Clearnet.contract.Call(opts, &out, "getContractStats")
+
+	outstruct := new(struct {
+		TotalNodes      *big.Int
+		TotalChannels   *big.Int
+		TotalMinutes    *big.Int
+		TreasuryBalance *big.Int
+	})
+	if err != nil {
+		return *outstruct, err
+	}
+
+	outstruct.TotalNodes = *abi.ConvertType(out[0], new(*big.Int)).(**big.Int)
+	outstruct.TotalChannels = *abi.ConvertType(out[1], new(*big.Int)).(**big.Int)
+	outstruct.TotalMinutes = *abi.ConvertType(out[2], new(*big.Int)).(**big.Int)
+	outstruct.TreasuryBalance = *abi.ConvertType(out[3], new(*big.Int)).(**big.Int)
+
+	return *outstruct, err
+
+}
+
+// GetContractStats is a free data retrieval call binding the contract method 0xdfe6b5d6.
+//
+// Solidity: function getContractStats() view returns(uint256 totalNodes, uint256 totalChannels, uint256 totalMinutes, uint256 treasuryBalance)
+func (_Clearnet *ClearnetSession) GetContractStats() (struct {
+	TotalNodes      *big.Int
+	TotalChannels   *big.Int
+	TotalMinutes    *big.Int
+	TreasuryBalance *big.Int
+}, error) {
+	return _Clearnet.Contract.GetContractStats(&_Clearnet.CallOpts)
+}
+
+// GetContractStats is a free data retrieval call binding the contract method 0xdfe6b5d6.
+//
+// Solidity: function getContractStats() view returns(uint256 totalNodes, uint256 totalChannels, uint256 totalMinutes, uint256 treasuryBalance)
+func (_Clearnet *ClearnetCallerSession) GetContractStats() (struct {
+	TotalNodes      *big.Int
+	TotalChannels   *big.Int
+	TotalMinutes    *big.Int
+	TreasuryBalance *big.Int
+}, error) {
+	return _Clearnet.Contract.GetContractStats(&_Clearnet.CallOpts)
 }
 
 // GetNodeInfo is a free data retrieval call binding the contract method 0x582115fb.
@@ -1067,12 +1060,12 @@ func (_Clearnet *ClearnetCallerSession) GovernanceContract() (common.Address, er
 	return _Clearnet.Contract.GovernanceContract(&_Clearnet.CallOpts)
 }
 
-// IsRelayOperator is a free data retrieval call binding the contract method 0xc6da94c5.
+// IsSignatureUsed is a free data retrieval call binding the contract method 0x4d80efae.
 //
-// Solidity: function isRelayOperator(address _address) view returns(bool)
-func (_Clearnet *ClearnetCaller) IsRelayOperator(opts *bind.CallOpts, _address common.Address) (bool, error) {
+// Solidity: function isSignatureUsed(bytes32 _messageHash) view returns(bool)
+func (_Clearnet *ClearnetCaller) IsSignatureUsed(opts *bind.CallOpts, _messageHash [32]byte) (bool, error) {
 	var out []interface{}
-	err := _Clearnet.contract.Call(opts, &out, "isRelayOperator", _address)
+	err := _Clearnet.contract.Call(opts, &out, "isSignatureUsed", _messageHash)
 
 	if err != nil {
 		return *new(bool), err
@@ -1084,23 +1077,23 @@ func (_Clearnet *ClearnetCaller) IsRelayOperator(opts *bind.CallOpts, _address c
 
 }
 
-// IsRelayOperator is a free data retrieval call binding the contract method 0xc6da94c5.
+// IsSignatureUsed is a free data retrieval call binding the contract method 0x4d80efae.
 //
-// Solidity: function isRelayOperator(address _address) view returns(bool)
-func (_Clearnet *ClearnetSession) IsRelayOperator(_address common.Address) (bool, error) {
-	return _Clearnet.Contract.IsRelayOperator(&_Clearnet.CallOpts, _address)
+// Solidity: function isSignatureUsed(bytes32 _messageHash) view returns(bool)
+func (_Clearnet *ClearnetSession) IsSignatureUsed(_messageHash [32]byte) (bool, error) {
+	return _Clearnet.Contract.IsSignatureUsed(&_Clearnet.CallOpts, _messageHash)
 }
 
-// IsRelayOperator is a free data retrieval call binding the contract method 0xc6da94c5.
+// IsSignatureUsed is a free data retrieval call binding the contract method 0x4d80efae.
 //
-// Solidity: function isRelayOperator(address _address) view returns(bool)
-func (_Clearnet *ClearnetCallerSession) IsRelayOperator(_address common.Address) (bool, error) {
-	return _Clearnet.Contract.IsRelayOperator(&_Clearnet.CallOpts, _address)
+// Solidity: function isSignatureUsed(bytes32 _messageHash) view returns(bool)
+func (_Clearnet *ClearnetCallerSession) IsSignatureUsed(_messageHash [32]byte) (bool, error) {
+	return _Clearnet.Contract.IsSignatureUsed(&_Clearnet.CallOpts, _messageHash)
 }
 
 // Nodes is a free data retrieval call binding the contract method 0x189a5a17.
 //
-// Solidity: function nodes(address ) view returns(string ipAddress, uint16 port, bool isActive, uint256 stakeAmount, uint256 reputationScore, uint256 pricePerMinute, uint256 totalMinutesServed, uint256 totalEarnings, uint256 lastActivity)
+// Solidity: function nodes(address ) view returns(string ipAddress, uint16 port, bool isActive, uint256 stakeAmount, uint256 reputationScore, uint256 pricePerMinute, uint256 totalMinutesServed, uint256 totalEarnings, uint256 lastActivity, uint256 totalRatingValue, uint256 totalRatingCount)
 func (_Clearnet *ClearnetCaller) Nodes(opts *bind.CallOpts, arg0 common.Address) (struct {
 	IpAddress          string
 	Port               uint16
@@ -1111,6 +1104,8 @@ func (_Clearnet *ClearnetCaller) Nodes(opts *bind.CallOpts, arg0 common.Address)
 	TotalMinutesServed *big.Int
 	TotalEarnings      *big.Int
 	LastActivity       *big.Int
+	TotalRatingValue   *big.Int
+	TotalRatingCount   *big.Int
 }, error) {
 	var out []interface{}
 	err := _Clearnet.contract.Call(opts, &out, "nodes", arg0)
@@ -1125,6 +1120,8 @@ func (_Clearnet *ClearnetCaller) Nodes(opts *bind.CallOpts, arg0 common.Address)
 		TotalMinutesServed *big.Int
 		TotalEarnings      *big.Int
 		LastActivity       *big.Int
+		TotalRatingValue   *big.Int
+		TotalRatingCount   *big.Int
 	})
 	if err != nil {
 		return *outstruct, err
@@ -1139,6 +1136,8 @@ func (_Clearnet *ClearnetCaller) Nodes(opts *bind.CallOpts, arg0 common.Address)
 	outstruct.TotalMinutesServed = *abi.ConvertType(out[6], new(*big.Int)).(**big.Int)
 	outstruct.TotalEarnings = *abi.ConvertType(out[7], new(*big.Int)).(**big.Int)
 	outstruct.LastActivity = *abi.ConvertType(out[8], new(*big.Int)).(**big.Int)
+	outstruct.TotalRatingValue = *abi.ConvertType(out[9], new(*big.Int)).(**big.Int)
+	outstruct.TotalRatingCount = *abi.ConvertType(out[10], new(*big.Int)).(**big.Int)
 
 	return *outstruct, err
 
@@ -1146,7 +1145,7 @@ func (_Clearnet *ClearnetCaller) Nodes(opts *bind.CallOpts, arg0 common.Address)
 
 // Nodes is a free data retrieval call binding the contract method 0x189a5a17.
 //
-// Solidity: function nodes(address ) view returns(string ipAddress, uint16 port, bool isActive, uint256 stakeAmount, uint256 reputationScore, uint256 pricePerMinute, uint256 totalMinutesServed, uint256 totalEarnings, uint256 lastActivity)
+// Solidity: function nodes(address ) view returns(string ipAddress, uint16 port, bool isActive, uint256 stakeAmount, uint256 reputationScore, uint256 pricePerMinute, uint256 totalMinutesServed, uint256 totalEarnings, uint256 lastActivity, uint256 totalRatingValue, uint256 totalRatingCount)
 func (_Clearnet *ClearnetSession) Nodes(arg0 common.Address) (struct {
 	IpAddress          string
 	Port               uint16
@@ -1157,13 +1156,15 @@ func (_Clearnet *ClearnetSession) Nodes(arg0 common.Address) (struct {
 	TotalMinutesServed *big.Int
 	TotalEarnings      *big.Int
 	LastActivity       *big.Int
+	TotalRatingValue   *big.Int
+	TotalRatingCount   *big.Int
 }, error) {
 	return _Clearnet.Contract.Nodes(&_Clearnet.CallOpts, arg0)
 }
 
 // Nodes is a free data retrieval call binding the contract method 0x189a5a17.
 //
-// Solidity: function nodes(address ) view returns(string ipAddress, uint16 port, bool isActive, uint256 stakeAmount, uint256 reputationScore, uint256 pricePerMinute, uint256 totalMinutesServed, uint256 totalEarnings, uint256 lastActivity)
+// Solidity: function nodes(address ) view returns(string ipAddress, uint16 port, bool isActive, uint256 stakeAmount, uint256 reputationScore, uint256 pricePerMinute, uint256 totalMinutesServed, uint256 totalEarnings, uint256 lastActivity, uint256 totalRatingValue, uint256 totalRatingCount)
 func (_Clearnet *ClearnetCallerSession) Nodes(arg0 common.Address) (struct {
 	IpAddress          string
 	Port               uint16
@@ -1174,6 +1175,8 @@ func (_Clearnet *ClearnetCallerSession) Nodes(arg0 common.Address) (struct {
 	TotalMinutesServed *big.Int
 	TotalEarnings      *big.Int
 	LastActivity       *big.Int
+	TotalRatingValue   *big.Int
+	TotalRatingCount   *big.Int
 }, error) {
 	return _Clearnet.Contract.Nodes(&_Clearnet.CallOpts, arg0)
 }
@@ -1321,37 +1324,6 @@ func (_Clearnet *ClearnetCallerSession) PendingGovernance() (common.Address, err
 	return _Clearnet.Contract.PendingGovernance(&_Clearnet.CallOpts)
 }
 
-// RelayOperators is a free data retrieval call binding the contract method 0x059b2725.
-//
-// Solidity: function relayOperators(address ) view returns(bool)
-func (_Clearnet *ClearnetCaller) RelayOperators(opts *bind.CallOpts, arg0 common.Address) (bool, error) {
-	var out []interface{}
-	err := _Clearnet.contract.Call(opts, &out, "relayOperators", arg0)
-
-	if err != nil {
-		return *new(bool), err
-	}
-
-	out0 := *abi.ConvertType(out[0], new(bool)).(*bool)
-
-	return out0, err
-
-}
-
-// RelayOperators is a free data retrieval call binding the contract method 0x059b2725.
-//
-// Solidity: function relayOperators(address ) view returns(bool)
-func (_Clearnet *ClearnetSession) RelayOperators(arg0 common.Address) (bool, error) {
-	return _Clearnet.Contract.RelayOperators(&_Clearnet.CallOpts, arg0)
-}
-
-// RelayOperators is a free data retrieval call binding the contract method 0x059b2725.
-//
-// Solidity: function relayOperators(address ) view returns(bool)
-func (_Clearnet *ClearnetCallerSession) RelayOperators(arg0 common.Address) (bool, error) {
-	return _Clearnet.Contract.RelayOperators(&_Clearnet.CallOpts, arg0)
-}
-
 // TotalBandwidthMinutes is a free data retrieval call binding the contract method 0xed555a05.
 //
 // Solidity: function totalBandwidthMinutes() view returns(uint256)
@@ -1445,6 +1417,27 @@ func (_Clearnet *ClearnetCallerSession) UsedSignatures(arg0 [32]byte) (bool, err
 	return _Clearnet.Contract.UsedSignatures(&_Clearnet.CallOpts, arg0)
 }
 
+// AbortConnection is a paid mutator transaction binding the contract method 0x7cf14242.
+//
+// Solidity: function abortConnection(string vpnClientPublicKey, uint256 _connectionStartTime, uint256 _agreedPricePerMinute, bytes _clientSignature) returns()
+func (_Clearnet *ClearnetTransactor) AbortConnection(opts *bind.TransactOpts, vpnClientPublicKey string, _connectionStartTime *big.Int, _agreedPricePerMinute *big.Int, _clientSignature []byte) (*types.Transaction, error) {
+	return _Clearnet.contract.Transact(opts, "abortConnection", vpnClientPublicKey, _connectionStartTime, _agreedPricePerMinute, _clientSignature)
+}
+
+// AbortConnection is a paid mutator transaction binding the contract method 0x7cf14242.
+//
+// Solidity: function abortConnection(string vpnClientPublicKey, uint256 _connectionStartTime, uint256 _agreedPricePerMinute, bytes _clientSignature) returns()
+func (_Clearnet *ClearnetSession) AbortConnection(vpnClientPublicKey string, _connectionStartTime *big.Int, _agreedPricePerMinute *big.Int, _clientSignature []byte) (*types.Transaction, error) {
+	return _Clearnet.Contract.AbortConnection(&_Clearnet.TransactOpts, vpnClientPublicKey, _connectionStartTime, _agreedPricePerMinute, _clientSignature)
+}
+
+// AbortConnection is a paid mutator transaction binding the contract method 0x7cf14242.
+//
+// Solidity: function abortConnection(string vpnClientPublicKey, uint256 _connectionStartTime, uint256 _agreedPricePerMinute, bytes _clientSignature) returns()
+func (_Clearnet *ClearnetTransactorSession) AbortConnection(vpnClientPublicKey string, _connectionStartTime *big.Int, _agreedPricePerMinute *big.Int, _clientSignature []byte) (*types.Transaction, error) {
+	return _Clearnet.Contract.AbortConnection(&_Clearnet.TransactOpts, vpnClientPublicKey, _connectionStartTime, _agreedPricePerMinute, _clientSignature)
+}
+
 // AcceptGovernanceTransfer is a paid mutator transaction binding the contract method 0x2a90b8da.
 //
 // Solidity: function acceptGovernanceTransfer() returns()
@@ -1464,27 +1457,6 @@ func (_Clearnet *ClearnetSession) AcceptGovernanceTransfer() (*types.Transaction
 // Solidity: function acceptGovernanceTransfer() returns()
 func (_Clearnet *ClearnetTransactorSession) AcceptGovernanceTransfer() (*types.Transaction, error) {
 	return _Clearnet.Contract.AcceptGovernanceTransfer(&_Clearnet.TransactOpts)
-}
-
-// AddRelayOperator is a paid mutator transaction binding the contract method 0x1ee8b2c0.
-//
-// Solidity: function addRelayOperator(address _relay) returns()
-func (_Clearnet *ClearnetTransactor) AddRelayOperator(opts *bind.TransactOpts, _relay common.Address) (*types.Transaction, error) {
-	return _Clearnet.contract.Transact(opts, "addRelayOperator", _relay)
-}
-
-// AddRelayOperator is a paid mutator transaction binding the contract method 0x1ee8b2c0.
-//
-// Solidity: function addRelayOperator(address _relay) returns()
-func (_Clearnet *ClearnetSession) AddRelayOperator(_relay common.Address) (*types.Transaction, error) {
-	return _Clearnet.Contract.AddRelayOperator(&_Clearnet.TransactOpts, _relay)
-}
-
-// AddRelayOperator is a paid mutator transaction binding the contract method 0x1ee8b2c0.
-//
-// Solidity: function addRelayOperator(address _relay) returns()
-func (_Clearnet *ClearnetTransactorSession) AddRelayOperator(_relay common.Address) (*types.Transaction, error) {
-	return _Clearnet.Contract.AddRelayOperator(&_Clearnet.TransactOpts, _relay)
 }
 
 // ClosePaymentChannel is a paid mutator transaction binding the contract method 0x5959d8be.
@@ -1592,25 +1564,25 @@ func (_Clearnet *ClearnetTransactorSession) Pause() (*types.Transaction, error) 
 	return _Clearnet.Contract.Pause(&_Clearnet.TransactOpts)
 }
 
-// ProcessPayment is a paid mutator transaction binding the contract method 0x908466b9.
+// ProcessPayment is a paid mutator transaction binding the contract method 0xc9255d02.
 //
-// Solidity: function processPayment(address _client, address _node, uint256 _minutesUsed, uint256 _nonce, bytes _clientSignature, bytes _nodeSignature, bytes _relaySignature) returns()
-func (_Clearnet *ClearnetTransactor) ProcessPayment(opts *bind.TransactOpts, _client common.Address, _node common.Address, _minutesUsed *big.Int, _nonce *big.Int, _clientSignature []byte, _nodeSignature []byte, _relaySignature []byte) (*types.Transaction, error) {
-	return _Clearnet.contract.Transact(opts, "processPayment", _client, _node, _minutesUsed, _nonce, _clientSignature, _nodeSignature, _relaySignature)
+// Solidity: function processPayment(address _client, address _node, string vpnClientPublicKey, uint256 _connectionStartTime, uint256 _agreedPricePerMinute, bool _ratingProvided, uint256 _rating, bytes _clientSignature, bytes _nodeSignature) returns()
+func (_Clearnet *ClearnetTransactor) ProcessPayment(opts *bind.TransactOpts, _client common.Address, _node common.Address, vpnClientPublicKey string, _connectionStartTime *big.Int, _agreedPricePerMinute *big.Int, _ratingProvided bool, _rating *big.Int, _clientSignature []byte, _nodeSignature []byte) (*types.Transaction, error) {
+	return _Clearnet.contract.Transact(opts, "processPayment", _client, _node, vpnClientPublicKey, _connectionStartTime, _agreedPricePerMinute, _ratingProvided, _rating, _clientSignature, _nodeSignature)
 }
 
-// ProcessPayment is a paid mutator transaction binding the contract method 0x908466b9.
+// ProcessPayment is a paid mutator transaction binding the contract method 0xc9255d02.
 //
-// Solidity: function processPayment(address _client, address _node, uint256 _minutesUsed, uint256 _nonce, bytes _clientSignature, bytes _nodeSignature, bytes _relaySignature) returns()
-func (_Clearnet *ClearnetSession) ProcessPayment(_client common.Address, _node common.Address, _minutesUsed *big.Int, _nonce *big.Int, _clientSignature []byte, _nodeSignature []byte, _relaySignature []byte) (*types.Transaction, error) {
-	return _Clearnet.Contract.ProcessPayment(&_Clearnet.TransactOpts, _client, _node, _minutesUsed, _nonce, _clientSignature, _nodeSignature, _relaySignature)
+// Solidity: function processPayment(address _client, address _node, string vpnClientPublicKey, uint256 _connectionStartTime, uint256 _agreedPricePerMinute, bool _ratingProvided, uint256 _rating, bytes _clientSignature, bytes _nodeSignature) returns()
+func (_Clearnet *ClearnetSession) ProcessPayment(_client common.Address, _node common.Address, vpnClientPublicKey string, _connectionStartTime *big.Int, _agreedPricePerMinute *big.Int, _ratingProvided bool, _rating *big.Int, _clientSignature []byte, _nodeSignature []byte) (*types.Transaction, error) {
+	return _Clearnet.Contract.ProcessPayment(&_Clearnet.TransactOpts, _client, _node, vpnClientPublicKey, _connectionStartTime, _agreedPricePerMinute, _ratingProvided, _rating, _clientSignature, _nodeSignature)
 }
 
-// ProcessPayment is a paid mutator transaction binding the contract method 0x908466b9.
+// ProcessPayment is a paid mutator transaction binding the contract method 0xc9255d02.
 //
-// Solidity: function processPayment(address _client, address _node, uint256 _minutesUsed, uint256 _nonce, bytes _clientSignature, bytes _nodeSignature, bytes _relaySignature) returns()
-func (_Clearnet *ClearnetTransactorSession) ProcessPayment(_client common.Address, _node common.Address, _minutesUsed *big.Int, _nonce *big.Int, _clientSignature []byte, _nodeSignature []byte, _relaySignature []byte) (*types.Transaction, error) {
-	return _Clearnet.Contract.ProcessPayment(&_Clearnet.TransactOpts, _client, _node, _minutesUsed, _nonce, _clientSignature, _nodeSignature, _relaySignature)
+// Solidity: function processPayment(address _client, address _node, string vpnClientPublicKey, uint256 _connectionStartTime, uint256 _agreedPricePerMinute, bool _ratingProvided, uint256 _rating, bytes _clientSignature, bytes _nodeSignature) returns()
+func (_Clearnet *ClearnetTransactorSession) ProcessPayment(_client common.Address, _node common.Address, vpnClientPublicKey string, _connectionStartTime *big.Int, _agreedPricePerMinute *big.Int, _ratingProvided bool, _rating *big.Int, _clientSignature []byte, _nodeSignature []byte) (*types.Transaction, error) {
+	return _Clearnet.Contract.ProcessPayment(&_Clearnet.TransactOpts, _client, _node, vpnClientPublicKey, _connectionStartTime, _agreedPricePerMinute, _ratingProvided, _rating, _clientSignature, _nodeSignature)
 }
 
 // RegisterNode is a paid mutator transaction binding the contract method 0xdab71a06.
@@ -1632,27 +1604,6 @@ func (_Clearnet *ClearnetSession) RegisterNode(_ipAddress string, _port uint16, 
 // Solidity: function registerNode(string _ipAddress, uint16 _port, uint256 _pricePerMinute) returns()
 func (_Clearnet *ClearnetTransactorSession) RegisterNode(_ipAddress string, _port uint16, _pricePerMinute *big.Int) (*types.Transaction, error) {
 	return _Clearnet.Contract.RegisterNode(&_Clearnet.TransactOpts, _ipAddress, _port, _pricePerMinute)
-}
-
-// RemoveRelayOperator is a paid mutator transaction binding the contract method 0x323c9b09.
-//
-// Solidity: function removeRelayOperator(address _relay) returns()
-func (_Clearnet *ClearnetTransactor) RemoveRelayOperator(opts *bind.TransactOpts, _relay common.Address) (*types.Transaction, error) {
-	return _Clearnet.contract.Transact(opts, "removeRelayOperator", _relay)
-}
-
-// RemoveRelayOperator is a paid mutator transaction binding the contract method 0x323c9b09.
-//
-// Solidity: function removeRelayOperator(address _relay) returns()
-func (_Clearnet *ClearnetSession) RemoveRelayOperator(_relay common.Address) (*types.Transaction, error) {
-	return _Clearnet.Contract.RemoveRelayOperator(&_Clearnet.TransactOpts, _relay)
-}
-
-// RemoveRelayOperator is a paid mutator transaction binding the contract method 0x323c9b09.
-//
-// Solidity: function removeRelayOperator(address _relay) returns()
-func (_Clearnet *ClearnetTransactorSession) RemoveRelayOperator(_relay common.Address) (*types.Transaction, error) {
-	return _Clearnet.Contract.RemoveRelayOperator(&_Clearnet.TransactOpts, _relay)
 }
 
 // RenounceOwnership is a paid mutator transaction binding the contract method 0x715018a6.
@@ -1802,27 +1753,6 @@ func (_Clearnet *ClearnetTransactorSession) UpdatePrice(_newPricePerMinute *big.
 	return _Clearnet.Contract.UpdatePrice(&_Clearnet.TransactOpts, _newPricePerMinute)
 }
 
-// UpdateReputation is a paid mutator transaction binding the contract method 0xe2c13e32.
-//
-// Solidity: function updateReputation(address _nodeID, bool _successfulSession) returns()
-func (_Clearnet *ClearnetTransactor) UpdateReputation(opts *bind.TransactOpts, _nodeID common.Address, _successfulSession bool) (*types.Transaction, error) {
-	return _Clearnet.contract.Transact(opts, "updateReputation", _nodeID, _successfulSession)
-}
-
-// UpdateReputation is a paid mutator transaction binding the contract method 0xe2c13e32.
-//
-// Solidity: function updateReputation(address _nodeID, bool _successfulSession) returns()
-func (_Clearnet *ClearnetSession) UpdateReputation(_nodeID common.Address, _successfulSession bool) (*types.Transaction, error) {
-	return _Clearnet.Contract.UpdateReputation(&_Clearnet.TransactOpts, _nodeID, _successfulSession)
-}
-
-// UpdateReputation is a paid mutator transaction binding the contract method 0xe2c13e32.
-//
-// Solidity: function updateReputation(address _nodeID, bool _successfulSession) returns()
-func (_Clearnet *ClearnetTransactorSession) UpdateReputation(_nodeID common.Address, _successfulSession bool) (*types.Transaction, error) {
-	return _Clearnet.Contract.UpdateReputation(&_Clearnet.TransactOpts, _nodeID, _successfulSession)
-}
-
 // WithdrawTreasuryFunds is a paid mutator transaction binding the contract method 0x661b8702.
 //
 // Solidity: function withdrawTreasuryFunds(uint256 _amount) returns()
@@ -1842,6 +1772,152 @@ func (_Clearnet *ClearnetSession) WithdrawTreasuryFunds(_amount *big.Int) (*type
 // Solidity: function withdrawTreasuryFunds(uint256 _amount) returns()
 func (_Clearnet *ClearnetTransactorSession) WithdrawTreasuryFunds(_amount *big.Int) (*types.Transaction, error) {
 	return _Clearnet.Contract.WithdrawTreasuryFunds(&_Clearnet.TransactOpts, _amount)
+}
+
+// ClearnetConnectionAbortedIterator is returned from FilterConnectionAborted and is used to iterate over the raw logs and unpacked data for ConnectionAborted events raised by the Clearnet contract.
+type ClearnetConnectionAbortedIterator struct {
+	Event *ClearnetConnectionAborted // Event containing the contract specifics and raw log
+
+	contract *bind.BoundContract // Generic contract to use for unpacking event data
+	event    string              // Event name to use for unpacking event data
+
+	logs chan types.Log        // Log channel receiving the found contract events
+	sub  ethereum.Subscription // Subscription for errors, completion and termination
+	done bool                  // Whether the subscription completed delivering logs
+	fail error                 // Occurred error to stop iteration
+}
+
+// Next advances the iterator to the subsequent event, returning whether there
+// are any more events found. In case of a retrieval or parsing error, false is
+// returned and Error() can be queried for the exact failure.
+func (it *ClearnetConnectionAbortedIterator) Next() bool {
+	// If the iterator failed, stop iterating
+	if it.fail != nil {
+		return false
+	}
+	// If the iterator completed, deliver directly whatever's available
+	if it.done {
+		select {
+		case log := <-it.logs:
+			it.Event = new(ClearnetConnectionAborted)
+			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+				it.fail = err
+				return false
+			}
+			it.Event.Raw = log
+			return true
+
+		default:
+			return false
+		}
+	}
+	// Iterator still in progress, wait for either a data or an error event
+	select {
+	case log := <-it.logs:
+		it.Event = new(ClearnetConnectionAborted)
+		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+			it.fail = err
+			return false
+		}
+		it.Event.Raw = log
+		return true
+
+	case err := <-it.sub.Err():
+		it.done = true
+		it.fail = err
+		return it.Next()
+	}
+}
+
+// Error returns any retrieval or parsing error occurred during filtering.
+func (it *ClearnetConnectionAbortedIterator) Error() error {
+	return it.fail
+}
+
+// Close terminates the iteration process, releasing any pending underlying
+// resources.
+func (it *ClearnetConnectionAbortedIterator) Close() error {
+	it.sub.Unsubscribe()
+	return nil
+}
+
+// ClearnetConnectionAborted represents a ConnectionAborted event raised by the Clearnet contract.
+type ClearnetConnectionAborted struct {
+	Client              common.Address
+	ConnectionStartTime *big.Int
+	AbortTime           *big.Int
+	Raw                 types.Log // Blockchain specific contextual infos
+}
+
+// FilterConnectionAborted is a free log retrieval operation binding the contract event 0xe35a65d86964ac346ad88e7b86b9e2f139f660d6d1bf45d92653ad6e0bfefe32.
+//
+// Solidity: event ConnectionAborted(address indexed client, uint256 connectionStartTime, uint256 abortTime)
+func (_Clearnet *ClearnetFilterer) FilterConnectionAborted(opts *bind.FilterOpts, client []common.Address) (*ClearnetConnectionAbortedIterator, error) {
+
+	var clientRule []interface{}
+	for _, clientItem := range client {
+		clientRule = append(clientRule, clientItem)
+	}
+
+	logs, sub, err := _Clearnet.contract.FilterLogs(opts, "ConnectionAborted", clientRule)
+	if err != nil {
+		return nil, err
+	}
+	return &ClearnetConnectionAbortedIterator{contract: _Clearnet.contract, event: "ConnectionAborted", logs: logs, sub: sub}, nil
+}
+
+// WatchConnectionAborted is a free log subscription operation binding the contract event 0xe35a65d86964ac346ad88e7b86b9e2f139f660d6d1bf45d92653ad6e0bfefe32.
+//
+// Solidity: event ConnectionAborted(address indexed client, uint256 connectionStartTime, uint256 abortTime)
+func (_Clearnet *ClearnetFilterer) WatchConnectionAborted(opts *bind.WatchOpts, sink chan<- *ClearnetConnectionAborted, client []common.Address) (event.Subscription, error) {
+
+	var clientRule []interface{}
+	for _, clientItem := range client {
+		clientRule = append(clientRule, clientItem)
+	}
+
+	logs, sub, err := _Clearnet.contract.WatchLogs(opts, "ConnectionAborted", clientRule)
+	if err != nil {
+		return nil, err
+	}
+	return event.NewSubscription(func(quit <-chan struct{}) error {
+		defer sub.Unsubscribe()
+		for {
+			select {
+			case log := <-logs:
+				// New log arrived, parse the event and forward to the user
+				event := new(ClearnetConnectionAborted)
+				if err := _Clearnet.contract.UnpackLog(event, "ConnectionAborted", log); err != nil {
+					return err
+				}
+				event.Raw = log
+
+				select {
+				case sink <- event:
+				case err := <-sub.Err():
+					return err
+				case <-quit:
+					return nil
+				}
+			case err := <-sub.Err():
+				return err
+			case <-quit:
+				return nil
+			}
+		}
+	}), nil
+}
+
+// ParseConnectionAborted is a log parse operation binding the contract event 0xe35a65d86964ac346ad88e7b86b9e2f139f660d6d1bf45d92653ad6e0bfefe32.
+//
+// Solidity: event ConnectionAborted(address indexed client, uint256 connectionStartTime, uint256 abortTime)
+func (_Clearnet *ClearnetFilterer) ParseConnectionAborted(log types.Log) (*ClearnetConnectionAborted, error) {
+	event := new(ClearnetConnectionAborted)
+	if err := _Clearnet.contract.UnpackLog(event, "ConnectionAborted", log); err != nil {
+		return nil, err
+	}
+	event.Raw = log
+	return event, nil
 }
 
 // ClearnetGovernanceTransferInitiatedIterator is returned from FilterGovernanceTransferInitiated and is used to iterate over the raw logs and unpacked data for GovernanceTransferInitiated events raised by the Clearnet contract.
@@ -2880,6 +2956,151 @@ func (_Clearnet *ClearnetFilterer) ParseNodeUpdated(log types.Log) (*ClearnetNod
 	return event, nil
 }
 
+// ClearnetOwnerShareAccruedIterator is returned from FilterOwnerShareAccrued and is used to iterate over the raw logs and unpacked data for OwnerShareAccrued events raised by the Clearnet contract.
+type ClearnetOwnerShareAccruedIterator struct {
+	Event *ClearnetOwnerShareAccrued // Event containing the contract specifics and raw log
+
+	contract *bind.BoundContract // Generic contract to use for unpacking event data
+	event    string              // Event name to use for unpacking event data
+
+	logs chan types.Log        // Log channel receiving the found contract events
+	sub  ethereum.Subscription // Subscription for errors, completion and termination
+	done bool                  // Whether the subscription completed delivering logs
+	fail error                 // Occurred error to stop iteration
+}
+
+// Next advances the iterator to the subsequent event, returning whether there
+// are any more events found. In case of a retrieval or parsing error, false is
+// returned and Error() can be queried for the exact failure.
+func (it *ClearnetOwnerShareAccruedIterator) Next() bool {
+	// If the iterator failed, stop iterating
+	if it.fail != nil {
+		return false
+	}
+	// If the iterator completed, deliver directly whatever's available
+	if it.done {
+		select {
+		case log := <-it.logs:
+			it.Event = new(ClearnetOwnerShareAccrued)
+			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+				it.fail = err
+				return false
+			}
+			it.Event.Raw = log
+			return true
+
+		default:
+			return false
+		}
+	}
+	// Iterator still in progress, wait for either a data or an error event
+	select {
+	case log := <-it.logs:
+		it.Event = new(ClearnetOwnerShareAccrued)
+		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+			it.fail = err
+			return false
+		}
+		it.Event.Raw = log
+		return true
+
+	case err := <-it.sub.Err():
+		it.done = true
+		it.fail = err
+		return it.Next()
+	}
+}
+
+// Error returns any retrieval or parsing error occurred during filtering.
+func (it *ClearnetOwnerShareAccruedIterator) Error() error {
+	return it.fail
+}
+
+// Close terminates the iteration process, releasing any pending underlying
+// resources.
+func (it *ClearnetOwnerShareAccruedIterator) Close() error {
+	it.sub.Unsubscribe()
+	return nil
+}
+
+// ClearnetOwnerShareAccrued represents a OwnerShareAccrued event raised by the Clearnet contract.
+type ClearnetOwnerShareAccrued struct {
+	OwnerAccount common.Address
+	Amount       *big.Int
+	Raw          types.Log // Blockchain specific contextual infos
+}
+
+// FilterOwnerShareAccrued is a free log retrieval operation binding the contract event 0x7895437044a9e0e4368f7394c8b3c2ba669bb20b14383a7cdbe292afa6c6a53f.
+//
+// Solidity: event OwnerShareAccrued(address indexed ownerAccount, uint256 amount)
+func (_Clearnet *ClearnetFilterer) FilterOwnerShareAccrued(opts *bind.FilterOpts, ownerAccount []common.Address) (*ClearnetOwnerShareAccruedIterator, error) {
+
+	var ownerAccountRule []interface{}
+	for _, ownerAccountItem := range ownerAccount {
+		ownerAccountRule = append(ownerAccountRule, ownerAccountItem)
+	}
+
+	logs, sub, err := _Clearnet.contract.FilterLogs(opts, "OwnerShareAccrued", ownerAccountRule)
+	if err != nil {
+		return nil, err
+	}
+	return &ClearnetOwnerShareAccruedIterator{contract: _Clearnet.contract, event: "OwnerShareAccrued", logs: logs, sub: sub}, nil
+}
+
+// WatchOwnerShareAccrued is a free log subscription operation binding the contract event 0x7895437044a9e0e4368f7394c8b3c2ba669bb20b14383a7cdbe292afa6c6a53f.
+//
+// Solidity: event OwnerShareAccrued(address indexed ownerAccount, uint256 amount)
+func (_Clearnet *ClearnetFilterer) WatchOwnerShareAccrued(opts *bind.WatchOpts, sink chan<- *ClearnetOwnerShareAccrued, ownerAccount []common.Address) (event.Subscription, error) {
+
+	var ownerAccountRule []interface{}
+	for _, ownerAccountItem := range ownerAccount {
+		ownerAccountRule = append(ownerAccountRule, ownerAccountItem)
+	}
+
+	logs, sub, err := _Clearnet.contract.WatchLogs(opts, "OwnerShareAccrued", ownerAccountRule)
+	if err != nil {
+		return nil, err
+	}
+	return event.NewSubscription(func(quit <-chan struct{}) error {
+		defer sub.Unsubscribe()
+		for {
+			select {
+			case log := <-logs:
+				// New log arrived, parse the event and forward to the user
+				event := new(ClearnetOwnerShareAccrued)
+				if err := _Clearnet.contract.UnpackLog(event, "OwnerShareAccrued", log); err != nil {
+					return err
+				}
+				event.Raw = log
+
+				select {
+				case sink <- event:
+				case err := <-sub.Err():
+					return err
+				case <-quit:
+					return nil
+				}
+			case err := <-sub.Err():
+				return err
+			case <-quit:
+				return nil
+			}
+		}
+	}), nil
+}
+
+// ParseOwnerShareAccrued is a log parse operation binding the contract event 0x7895437044a9e0e4368f7394c8b3c2ba669bb20b14383a7cdbe292afa6c6a53f.
+//
+// Solidity: event OwnerShareAccrued(address indexed ownerAccount, uint256 amount)
+func (_Clearnet *ClearnetFilterer) ParseOwnerShareAccrued(log types.Log) (*ClearnetOwnerShareAccrued, error) {
+	event := new(ClearnetOwnerShareAccrued)
+	if err := _Clearnet.contract.UnpackLog(event, "OwnerShareAccrued", log); err != nil {
+		return nil, err
+	}
+	event.Raw = log
+	return event, nil
+}
+
 // ClearnetOwnershipTransferredIterator is returned from FilterOwnershipTransferred and is used to iterate over the raw logs and unpacked data for OwnershipTransferred events raised by the Clearnet contract.
 type ClearnetOwnershipTransferredIterator struct {
 	Event *ClearnetOwnershipTransferred // Event containing the contract specifics and raw log
@@ -3682,19 +3903,21 @@ func (it *ClearnetPaymentProcessedIterator) Close() error {
 
 // ClearnetPaymentProcessed represents a PaymentProcessed event raised by the Clearnet contract.
 type ClearnetPaymentProcessed struct {
-	Client        common.Address
-	NodeID        common.Address
-	Amount        *big.Int
-	MinutesUsed   *big.Int
-	NodeShare     *big.Int
-	TreasuryShare *big.Int
-	RelayShare    *big.Int
-	Raw           types.Log // Blockchain specific contextual infos
+	Client         common.Address
+	NodeID         common.Address
+	Amount         *big.Int
+	MinutesUsed    *big.Int
+	NodeShare      *big.Int
+	TreasuryShare  *big.Int
+	OwnerShare     *big.Int
+	RatingProvided bool
+	Rating         *big.Int
+	Raw            types.Log // Blockchain specific contextual infos
 }
 
-// FilterPaymentProcessed is a free log retrieval operation binding the contract event 0x9383ea3334618ec4baeccb12cd192b2f264193c226bcf129ea3b7334f4663187.
+// FilterPaymentProcessed is a free log retrieval operation binding the contract event 0x05acf778dacac6b6000bf31efacbb179011caaaf509efae7f3bd334760cdd61e.
 //
-// Solidity: event PaymentProcessed(address indexed client, address indexed nodeID, uint256 amount, uint256 minutesUsed, uint256 nodeShare, uint256 treasuryShare, uint256 relayShare)
+// Solidity: event PaymentProcessed(address indexed client, address indexed nodeID, uint256 amount, uint256 minutesUsed, uint256 nodeShare, uint256 treasuryShare, uint256 ownerShare, bool ratingProvided, uint256 rating)
 func (_Clearnet *ClearnetFilterer) FilterPaymentProcessed(opts *bind.FilterOpts, client []common.Address, nodeID []common.Address) (*ClearnetPaymentProcessedIterator, error) {
 
 	var clientRule []interface{}
@@ -3713,9 +3936,9 @@ func (_Clearnet *ClearnetFilterer) FilterPaymentProcessed(opts *bind.FilterOpts,
 	return &ClearnetPaymentProcessedIterator{contract: _Clearnet.contract, event: "PaymentProcessed", logs: logs, sub: sub}, nil
 }
 
-// WatchPaymentProcessed is a free log subscription operation binding the contract event 0x9383ea3334618ec4baeccb12cd192b2f264193c226bcf129ea3b7334f4663187.
+// WatchPaymentProcessed is a free log subscription operation binding the contract event 0x05acf778dacac6b6000bf31efacbb179011caaaf509efae7f3bd334760cdd61e.
 //
-// Solidity: event PaymentProcessed(address indexed client, address indexed nodeID, uint256 amount, uint256 minutesUsed, uint256 nodeShare, uint256 treasuryShare, uint256 relayShare)
+// Solidity: event PaymentProcessed(address indexed client, address indexed nodeID, uint256 amount, uint256 minutesUsed, uint256 nodeShare, uint256 treasuryShare, uint256 ownerShare, bool ratingProvided, uint256 rating)
 func (_Clearnet *ClearnetFilterer) WatchPaymentProcessed(opts *bind.WatchOpts, sink chan<- *ClearnetPaymentProcessed, client []common.Address, nodeID []common.Address) (event.Subscription, error) {
 
 	var clientRule []interface{}
@@ -3759,300 +3982,12 @@ func (_Clearnet *ClearnetFilterer) WatchPaymentProcessed(opts *bind.WatchOpts, s
 	}), nil
 }
 
-// ParsePaymentProcessed is a log parse operation binding the contract event 0x9383ea3334618ec4baeccb12cd192b2f264193c226bcf129ea3b7334f4663187.
+// ParsePaymentProcessed is a log parse operation binding the contract event 0x05acf778dacac6b6000bf31efacbb179011caaaf509efae7f3bd334760cdd61e.
 //
-// Solidity: event PaymentProcessed(address indexed client, address indexed nodeID, uint256 amount, uint256 minutesUsed, uint256 nodeShare, uint256 treasuryShare, uint256 relayShare)
+// Solidity: event PaymentProcessed(address indexed client, address indexed nodeID, uint256 amount, uint256 minutesUsed, uint256 nodeShare, uint256 treasuryShare, uint256 ownerShare, bool ratingProvided, uint256 rating)
 func (_Clearnet *ClearnetFilterer) ParsePaymentProcessed(log types.Log) (*ClearnetPaymentProcessed, error) {
 	event := new(ClearnetPaymentProcessed)
 	if err := _Clearnet.contract.UnpackLog(event, "PaymentProcessed", log); err != nil {
-		return nil, err
-	}
-	event.Raw = log
-	return event, nil
-}
-
-// ClearnetRelayOperatorAddedIterator is returned from FilterRelayOperatorAdded and is used to iterate over the raw logs and unpacked data for RelayOperatorAdded events raised by the Clearnet contract.
-type ClearnetRelayOperatorAddedIterator struct {
-	Event *ClearnetRelayOperatorAdded // Event containing the contract specifics and raw log
-
-	contract *bind.BoundContract // Generic contract to use for unpacking event data
-	event    string              // Event name to use for unpacking event data
-
-	logs chan types.Log        // Log channel receiving the found contract events
-	sub  ethereum.Subscription // Subscription for errors, completion and termination
-	done bool                  // Whether the subscription completed delivering logs
-	fail error                 // Occurred error to stop iteration
-}
-
-// Next advances the iterator to the subsequent event, returning whether there
-// are any more events found. In case of a retrieval or parsing error, false is
-// returned and Error() can be queried for the exact failure.
-func (it *ClearnetRelayOperatorAddedIterator) Next() bool {
-	// If the iterator failed, stop iterating
-	if it.fail != nil {
-		return false
-	}
-	// If the iterator completed, deliver directly whatever's available
-	if it.done {
-		select {
-		case log := <-it.logs:
-			it.Event = new(ClearnetRelayOperatorAdded)
-			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
-				it.fail = err
-				return false
-			}
-			it.Event.Raw = log
-			return true
-
-		default:
-			return false
-		}
-	}
-	// Iterator still in progress, wait for either a data or an error event
-	select {
-	case log := <-it.logs:
-		it.Event = new(ClearnetRelayOperatorAdded)
-		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
-			it.fail = err
-			return false
-		}
-		it.Event.Raw = log
-		return true
-
-	case err := <-it.sub.Err():
-		it.done = true
-		it.fail = err
-		return it.Next()
-	}
-}
-
-// Error returns any retrieval or parsing error occurred during filtering.
-func (it *ClearnetRelayOperatorAddedIterator) Error() error {
-	return it.fail
-}
-
-// Close terminates the iteration process, releasing any pending underlying
-// resources.
-func (it *ClearnetRelayOperatorAddedIterator) Close() error {
-	it.sub.Unsubscribe()
-	return nil
-}
-
-// ClearnetRelayOperatorAdded represents a RelayOperatorAdded event raised by the Clearnet contract.
-type ClearnetRelayOperatorAdded struct {
-	Relay common.Address
-	Raw   types.Log // Blockchain specific contextual infos
-}
-
-// FilterRelayOperatorAdded is a free log retrieval operation binding the contract event 0x30e3a6db2d3b6d9fd79c76cdbdd1e2373e15863cb257e2aa761f148546004126.
-//
-// Solidity: event RelayOperatorAdded(address indexed relay)
-func (_Clearnet *ClearnetFilterer) FilterRelayOperatorAdded(opts *bind.FilterOpts, relay []common.Address) (*ClearnetRelayOperatorAddedIterator, error) {
-
-	var relayRule []interface{}
-	for _, relayItem := range relay {
-		relayRule = append(relayRule, relayItem)
-	}
-
-	logs, sub, err := _Clearnet.contract.FilterLogs(opts, "RelayOperatorAdded", relayRule)
-	if err != nil {
-		return nil, err
-	}
-	return &ClearnetRelayOperatorAddedIterator{contract: _Clearnet.contract, event: "RelayOperatorAdded", logs: logs, sub: sub}, nil
-}
-
-// WatchRelayOperatorAdded is a free log subscription operation binding the contract event 0x30e3a6db2d3b6d9fd79c76cdbdd1e2373e15863cb257e2aa761f148546004126.
-//
-// Solidity: event RelayOperatorAdded(address indexed relay)
-func (_Clearnet *ClearnetFilterer) WatchRelayOperatorAdded(opts *bind.WatchOpts, sink chan<- *ClearnetRelayOperatorAdded, relay []common.Address) (event.Subscription, error) {
-
-	var relayRule []interface{}
-	for _, relayItem := range relay {
-		relayRule = append(relayRule, relayItem)
-	}
-
-	logs, sub, err := _Clearnet.contract.WatchLogs(opts, "RelayOperatorAdded", relayRule)
-	if err != nil {
-		return nil, err
-	}
-	return event.NewSubscription(func(quit <-chan struct{}) error {
-		defer sub.Unsubscribe()
-		for {
-			select {
-			case log := <-logs:
-				// New log arrived, parse the event and forward to the user
-				event := new(ClearnetRelayOperatorAdded)
-				if err := _Clearnet.contract.UnpackLog(event, "RelayOperatorAdded", log); err != nil {
-					return err
-				}
-				event.Raw = log
-
-				select {
-				case sink <- event:
-				case err := <-sub.Err():
-					return err
-				case <-quit:
-					return nil
-				}
-			case err := <-sub.Err():
-				return err
-			case <-quit:
-				return nil
-			}
-		}
-	}), nil
-}
-
-// ParseRelayOperatorAdded is a log parse operation binding the contract event 0x30e3a6db2d3b6d9fd79c76cdbdd1e2373e15863cb257e2aa761f148546004126.
-//
-// Solidity: event RelayOperatorAdded(address indexed relay)
-func (_Clearnet *ClearnetFilterer) ParseRelayOperatorAdded(log types.Log) (*ClearnetRelayOperatorAdded, error) {
-	event := new(ClearnetRelayOperatorAdded)
-	if err := _Clearnet.contract.UnpackLog(event, "RelayOperatorAdded", log); err != nil {
-		return nil, err
-	}
-	event.Raw = log
-	return event, nil
-}
-
-// ClearnetRelayOperatorRemovedIterator is returned from FilterRelayOperatorRemoved and is used to iterate over the raw logs and unpacked data for RelayOperatorRemoved events raised by the Clearnet contract.
-type ClearnetRelayOperatorRemovedIterator struct {
-	Event *ClearnetRelayOperatorRemoved // Event containing the contract specifics and raw log
-
-	contract *bind.BoundContract // Generic contract to use for unpacking event data
-	event    string              // Event name to use for unpacking event data
-
-	logs chan types.Log        // Log channel receiving the found contract events
-	sub  ethereum.Subscription // Subscription for errors, completion and termination
-	done bool                  // Whether the subscription completed delivering logs
-	fail error                 // Occurred error to stop iteration
-}
-
-// Next advances the iterator to the subsequent event, returning whether there
-// are any more events found. In case of a retrieval or parsing error, false is
-// returned and Error() can be queried for the exact failure.
-func (it *ClearnetRelayOperatorRemovedIterator) Next() bool {
-	// If the iterator failed, stop iterating
-	if it.fail != nil {
-		return false
-	}
-	// If the iterator completed, deliver directly whatever's available
-	if it.done {
-		select {
-		case log := <-it.logs:
-			it.Event = new(ClearnetRelayOperatorRemoved)
-			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
-				it.fail = err
-				return false
-			}
-			it.Event.Raw = log
-			return true
-
-		default:
-			return false
-		}
-	}
-	// Iterator still in progress, wait for either a data or an error event
-	select {
-	case log := <-it.logs:
-		it.Event = new(ClearnetRelayOperatorRemoved)
-		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
-			it.fail = err
-			return false
-		}
-		it.Event.Raw = log
-		return true
-
-	case err := <-it.sub.Err():
-		it.done = true
-		it.fail = err
-		return it.Next()
-	}
-}
-
-// Error returns any retrieval or parsing error occurred during filtering.
-func (it *ClearnetRelayOperatorRemovedIterator) Error() error {
-	return it.fail
-}
-
-// Close terminates the iteration process, releasing any pending underlying
-// resources.
-func (it *ClearnetRelayOperatorRemovedIterator) Close() error {
-	it.sub.Unsubscribe()
-	return nil
-}
-
-// ClearnetRelayOperatorRemoved represents a RelayOperatorRemoved event raised by the Clearnet contract.
-type ClearnetRelayOperatorRemoved struct {
-	Relay common.Address
-	Raw   types.Log // Blockchain specific contextual infos
-}
-
-// FilterRelayOperatorRemoved is a free log retrieval operation binding the contract event 0xa9160e48ced70f0a7bbb59246f46cfd9fb43d7750f9f412e3d434dd9fd5cbc94.
-//
-// Solidity: event RelayOperatorRemoved(address indexed relay)
-func (_Clearnet *ClearnetFilterer) FilterRelayOperatorRemoved(opts *bind.FilterOpts, relay []common.Address) (*ClearnetRelayOperatorRemovedIterator, error) {
-
-	var relayRule []interface{}
-	for _, relayItem := range relay {
-		relayRule = append(relayRule, relayItem)
-	}
-
-	logs, sub, err := _Clearnet.contract.FilterLogs(opts, "RelayOperatorRemoved", relayRule)
-	if err != nil {
-		return nil, err
-	}
-	return &ClearnetRelayOperatorRemovedIterator{contract: _Clearnet.contract, event: "RelayOperatorRemoved", logs: logs, sub: sub}, nil
-}
-
-// WatchRelayOperatorRemoved is a free log subscription operation binding the contract event 0xa9160e48ced70f0a7bbb59246f46cfd9fb43d7750f9f412e3d434dd9fd5cbc94.
-//
-// Solidity: event RelayOperatorRemoved(address indexed relay)
-func (_Clearnet *ClearnetFilterer) WatchRelayOperatorRemoved(opts *bind.WatchOpts, sink chan<- *ClearnetRelayOperatorRemoved, relay []common.Address) (event.Subscription, error) {
-
-	var relayRule []interface{}
-	for _, relayItem := range relay {
-		relayRule = append(relayRule, relayItem)
-	}
-
-	logs, sub, err := _Clearnet.contract.WatchLogs(opts, "RelayOperatorRemoved", relayRule)
-	if err != nil {
-		return nil, err
-	}
-	return event.NewSubscription(func(quit <-chan struct{}) error {
-		defer sub.Unsubscribe()
-		for {
-			select {
-			case log := <-logs:
-				// New log arrived, parse the event and forward to the user
-				event := new(ClearnetRelayOperatorRemoved)
-				if err := _Clearnet.contract.UnpackLog(event, "RelayOperatorRemoved", log); err != nil {
-					return err
-				}
-				event.Raw = log
-
-				select {
-				case sink <- event:
-				case err := <-sub.Err():
-					return err
-				case <-quit:
-					return nil
-				}
-			case err := <-sub.Err():
-				return err
-			case <-quit:
-				return nil
-			}
-		}
-	}), nil
-}
-
-// ParseRelayOperatorRemoved is a log parse operation binding the contract event 0xa9160e48ced70f0a7bbb59246f46cfd9fb43d7750f9f412e3d434dd9fd5cbc94.
-//
-// Solidity: event RelayOperatorRemoved(address indexed relay)
-func (_Clearnet *ClearnetFilterer) ParseRelayOperatorRemoved(log types.Log) (*ClearnetRelayOperatorRemoved, error) {
-	event := new(ClearnetRelayOperatorRemoved)
-	if err := _Clearnet.contract.UnpackLog(event, "RelayOperatorRemoved", log); err != nil {
 		return nil, err
 	}
 	event.Raw = log

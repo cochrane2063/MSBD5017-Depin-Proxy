@@ -192,7 +192,7 @@ func isValidNonce(nonce *big.Int) bool {
 		fmt.Println("Error getting current nonce:", err)
 		return false
 	}
-	if nonce.Cmp(currentNonce) == 1 {
+	if nonce.Cmp(new(big.Int).Add(currentNonce, big.NewInt(1))) == 0 {
 		return true
 	}
 	return false

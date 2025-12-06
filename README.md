@@ -56,7 +56,7 @@ export INFURA_ENDPOINT="https://sepolia.infura.io/v3/8c1eb7cd8a5a43c9bc5c3d69db1
 export CHAIN_ID="11155111"
 export CLEARNET_CONTRACT_ADDRESS="0x0305e95225f65db13e98c775dbb95b98178ae73b"
 export CLRTOKEN_CONTRACT_ADDRESS="0xf1664c17887767c8f58695846babb349ca61d2e9"
-export PORT="8080"
+export PROXY_PORT="8080"
 # export VPN_PORT="51820" #optional: by default it will be the port your wireguard server is listening on 
 sudo /path/to/file/clearnetNode
 ```

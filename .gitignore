@@ -2,3 +2,4 @@
 *.abi
 *.bin
 .env
+clearnetNode

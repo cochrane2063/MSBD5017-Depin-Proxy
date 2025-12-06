@@ -153,7 +153,7 @@ func initialize() {
 	initializeIPPool()
 	err = clearWireguardPeers()
 	if err != nil {
-		log.Fatal("Failed to clear Wireguard peers: " + err.Error())
+		fmt.Println("Failed to clear Wireguard peers: " + err.Error())
 	}
 
 	clrtoken_instance, clearnet_instance, client, err = initContract()

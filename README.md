@@ -20,6 +20,10 @@ If you are running an older version of docker compose, you should use
 docker-compose up -d
 ```
 
+Make sure you have the required ports open in your firewall!
+
+Set up port forwarding if necessary.
+
 ## Run binary file directly
 You can download the binary file from the releases section.
 

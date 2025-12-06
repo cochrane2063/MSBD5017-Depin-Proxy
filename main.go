@@ -208,45 +208,49 @@ func isValidNonce(nonce *big.Int, clientAddress common.Address) bool {
 	return nonce.Cmp(new(big.Int).Add(currentNonce, big.NewInt(1))) == 0
 }
 
+func checkConnection() {
+	currentTime := big.NewInt(time.Now().Unix())
+	for i := 0; i < protectedConnections.getConnectionsCount(); i++ {
+		conn := protectedConnections.getConnection(i)
+		elapsedMinutes := new(big.Int).Div(new(big.Int).Sub(currentTime, conn.connectionStartTime), big.NewInt(60))
+		totalCost := new(big.Int).Mul(elapsedMinutes, conn.agreedPricePerMinute)
+		paymentChannel, err := getPaymentChannelInfo(clearnet_instance, common.HexToAddress(conn.walletAddress))
+		if err != nil {
+			fmt.Println("Error getting payment channel info:", err)
+			continue
+		}
+
+		if conn.receivedNonce.Cmp(new(big.Int).Add(paymentChannel.nonce, big.NewInt(1))) != 0 {
+			err = removeWireguardPeer(conn.vpnClientPublicKey)
+			if err != nil {
+				fmt.Println("Error removing Wireguard peer:", err)
+				continue
+			}
+			protectedConnections.removeConnection(conn.walletAddress)
+			fmt.Println("Client nonce increased")
+			fmt.Println("Connection count:", protectedConnections.getConnectionsCount())
+			i--
+			continue
+		}
+
+		if paymentChannel.balance.Cmp(totalCost) == -1 {
+			fmt.Println("Disconnecting wallet address due to insufficient balance:", conn.walletAddress)
+			err = removeWireguardPeer(conn.vpnClientPublicKey)
+			if err != nil {
+				fmt.Println("Error removing Wireguard peer:", err)
+				continue
+			}
+			protectedConnections.removeConnection(conn.walletAddress)
+			fmt.Println("Connection count:", protectedConnections.getConnectionsCount())
+			i--
+		}
+	}
+}
+
 func disconnectWatcher() {
 	for {
 		time.Sleep(60 * time.Second)
-		currentTime := big.NewInt(time.Now().Unix())
-		for i := 0; i < protectedConnections.getConnectionsCount(); i++ {
-			conn := protectedConnections.getConnection(i)
-			elapsedMinutes := new(big.Int).Div(new(big.Int).Sub(currentTime, conn.connectionStartTime), big.NewInt(60))
-			totalCost := new(big.Int).Mul(elapsedMinutes, conn.agreedPricePerMinute)
-			paymentChannel, err := getPaymentChannelInfo(clearnet_instance, common.HexToAddress(conn.walletAddress))
-			if err != nil {
-				fmt.Println("Error getting payment channel info:", err)
-				continue
-			}
-
-			if conn.receivedNonce.Cmp(new(big.Int).Add(paymentChannel.nonce, big.NewInt(1))) != 0 {
-				err = removeWireguardPeer(conn.vpnClientPublicKey)
-				if err != nil {
-					fmt.Println("Error removing Wireguard peer:", err)
-					continue
-				}
-				protectedConnections.removeConnection(conn.walletAddress)
-				fmt.Println("Client nonce increased")
-				fmt.Println("Connection count:", protectedConnections.getConnectionsCount())
-				i--
-				continue
-			}
-
-			if paymentChannel.balance.Cmp(totalCost) == -1 {
-				fmt.Println("Disconnecting wallet address due to insufficient balance:", conn.walletAddress)
-				err = removeWireguardPeer(conn.vpnClientPublicKey)
-				if err != nil {
-					fmt.Println("Error removing Wireguard peer:", err)
-					continue
-				}
-				protectedConnections.removeConnection(conn.walletAddress)
-				fmt.Println("Connection count:", protectedConnections.getConnectionsCount())
-				i--
-			}
-		}
+		checkConnection()
 	}
 }
 
@@ -353,6 +357,7 @@ func connectionHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Invalid or reused nonce", http.StatusBadRequest)
 		return
 	}
+	checkConnection()
 	if protectedConnections.connectionExists(recoveredAddr) {
 		http.Error(w, "Connection already exists", http.StatusBadRequest)
 		return

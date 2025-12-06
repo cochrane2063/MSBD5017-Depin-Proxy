@@ -3,7 +3,22 @@
 Get some rewards for sharing your extra bandwith
 
 ## Getting Started
+You can use docker compose to run the server node.
 
+Make sure you have docker and docker compose installed.
+
+A docker compose file with private key are privided. Please use the private key included in the compose file. Because the server node requires sepolia ether and CLR Tokens to register. If you are using a private key with insufficient eth or CLT Tokens, the registration will fail.
+
+Download the docker-compose.yml file from this repo and cd into the directory with the docker-compose.yml file.
+
+Run
+```bash
+docker compose up -d
+```
+If you are running an older version of docker compose, you should use
+```bash
+docker-compose up -d
+```
 
 ## Run binary file directly
 You can download the binary file from the releases section.
@@ -31,7 +46,8 @@ Make sure to run the binary file with root. Because the proxy needs to access wi
 
 ```bash
 # The keys are provided for testing purposes
-export WALLET_PRIVATE_KEY="a671613a49bc7d7f07e9d365fd95705704cf17b787f10ac7f4c3b2de1da319d5"
+# Please use the key provided for testing since it already has ether and CLR Tokens.
+export WALLET_PRIVATE_KEY="f0ce4f9c5521bfb662312a18794928ba3c24ac8afa55c4687d894452818faaeb"
 export INFURA_ENDPOINT="https://sepolia.infura.io/v3/8c1eb7cd8a5a43c9bc5c3d69db182b83"
 export CHAIN_ID="11155111"
 export CLEARNET_CONTRACT_ADDRESS="0x0305e95225f65db13e98c775dbb95b98178ae73b"

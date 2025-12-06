@@ -142,13 +142,14 @@ func updateChanges() {
 
 func initialize() {
 	err := godotenv.Load()
-	if err != nil {
-		log.Println("No .env file found")
-	}
+	// if err != nil {
+	// 	log.Println("No .env file found")
+	// }
+	_ = err
 	ip = GetLocalIP()
-	port, err = strconv.Atoi(os.Getenv("PORT"))
+	port, err = strconv.Atoi(os.Getenv("PROXY_PORT"))
 	if err != nil {
-		log.Fatal("Invalid PORT value:" + err.Error())
+		log.Fatal("Invalid PROXY_PORT value:" + err.Error())
 	}
 	initializeIPPool()
 	err = clearWireguardPeers()
